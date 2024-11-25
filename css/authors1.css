@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Kumbh Sans', sans-serif;
+    color: #000000;
+    background-color: #FFFFFF;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+
+/* Стили логотипа */
+header .logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 400;
+    text-decoration: none;
+    color: inherit;
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+    margin-right: 10px;
+}
+
+header nav {
+    margin-left: 420px;
+}
+
+header nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 400;
+}
+
+header nav a:hover {
+    color: #9C9C9C;
+}
+
+.auth-buttons {
+    display: flex;
+}
+
+.auth-buttons button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: 1px solid #D9D9D9;
+    background-color: #FFFFFF;
+    color: #000000;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+.auth-buttons button:hover {
+    background-color: #D9D9D9;
+}
+
+.auth-buttons .register-btn {
+    background-color: #ECE4E4;
+}
+.section-title {
+    margin-top: 20px;
+    font-size: 40px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+    margin-left: 120px;
+    color: inherit;
+    color: #000000;
+}
+
+
+.authors-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.authors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    justify-items: left;
+    padding-left: 80px;
+    margin-top: 20px;
+}
+
+.author-card {
+    text-align: center;
+}
+
+.author-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+footer {
+    padding: 20px;
+    background-color: #FFFFFF;
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    font-family: 'Kumbh Sans', sans-serif;
+}

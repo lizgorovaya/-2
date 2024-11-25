@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автор</title>
+    <link rel="stylesheet" href="css/auto.css">
+</head>
+<body>
+    <div class="container">
+        <p>Автор</p>
+        <input type="text" id="fullName" placeholder="ФИО автора" required>
+        <textarea id="bio" placeholder="Биография" required></textarea>
+        <input type="file" id="photo" placeholder="Фотография" accept="image/*">
+    
+        <button id="registerBtn">СОЗДАТЬ</button>
+
+    </div>
+    <script>
+        document.getElementById("registerBtn").addEventListener("click", async function () {
+        const fullName = document.getElementById("fullName").value;
+        const bio = document.getElementById("bio").value;
+        const photo = document.getElementById("photo").files[0];
+
+        if (!fullName || !bio) {
+            alert("Заполните все обязательные поля!");
+            return;
+        }
+
+        // Создаём FormData для отправки данных
+        const formData = new FormData();
+        formData.append("fullName", fullName);
+        formData.append("bio", bio);
+        if (photo) {
+            formData.append("photo", photo);
+        }
+
+        try {
+            const response = await fetch("http://localhost:8080/api/authors", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                const newAuthor = await response.json();
+
+                // Добавляем данные на страницу
+                document.querySelector(".fio").textContent = newAuthor.fullName;
+                document.querySelector(".bio-block").textContent = newAuthor.bio;
+
+                const authorPhoto = document.querySelector(".author-photo");
+                if (newAuthor.photo) {
+                    authorPhoto.src = `data:image/jpeg;base64,${newAuthor.photo}`;
+                    authorPhoto.style.display = "block";
+                } else {
+                    authorPhoto.style.display = "none";
+                }
+
+                alert("Автор успешно создан!");
+                document.getElementById("fullName").value = "";
+                document.getElementById("bio").value = "";
+                document.getElementById("photo").value = "";
+            } else {
+                alert("Ошибка при создании автора!");
+            }
+        } catch (error) {
+            // console.error("Ошибка:", error);
+            alert("Произошла ошибка при отправке данных!");
+        }
+    });
+
+
+    </script>
+</body>

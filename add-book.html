@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание книгни</title>
+    <link rel="stylesheet" href="css/auto.css">
+</head>
+<body>
+    <div class="container">
+        <p>Книга</p>
+        <input type="text" id="fullName" placeholder="Название книги" required>
+        <textarea id="bio" placeholder="Описание книги" required></textarea>
+        <label for="authorSelect" placeholder="Выберите автора:"></label>
+        <select id="authorSelect">
+            <option value="Выберите" ></option>
+        </select>
+        <input type="file" id="photo" placeholder="Фотография" accept="image/*">
+
+    
+        <button id="registerBtn">СОЗДАТЬ</button>
+
+    </div>
+    
+    <script>
+        // document.getElementById("registerBtn").addEventListener("click", async function () {
+        //     // Получение данных из формы
+        //     const title = document.getElementById("fullName").value; // Название книги
+        //     const description = document.getElementById("bio").value; // Описание книги
+        //     const photo = document.getElementById("photo").files[0]; // Фото книги
+    
+        //     // Проверка заполненности обязательных полей
+        //     if (!title || !description) {
+        //         alert("Заполните все обязательные поля!");
+        //         return;
+        //     }
+    
+        //     // Создаём объект FormData для отправки данных
+        //     const formData = new FormData();
+        //     formData.append("title", title);
+        //     formData.append("description", description);
+        //     if (photo) {
+        //         formData.append("photo", photo); // Если файл загружен, добавляем его
+        //     }
+    
+        //     try {
+        //         // Отправляем POST-запрос на сервер
+        //         const response = await fetch("http://localhost:8080/api/books", {
+        //             method: "POST",
+        //             body: formData,
+        //         });
+    
+        //         // Обработка ответа от сервера
+        //         if (response.ok) {
+        //             alert("Книга успешно добавлена!");
+        //             // Очищаем форму после успешного добавления
+        //             document.getElementById("fullName").value = "";
+        //             document.getElementById("bio").value = "";
+        //             document.getElementById("photo").value = "";
+        //         } else {
+        //             const errorData = await response.json();
+        //             alert(`Ошибка при добавлении книги: ${errorData.message}`);
+        //         }
+        //     } catch (error) {
+        //         console.error("Ошибка:", error);
+        //         alert("Произошла ошибка при отправке данных на сервер!");
+        //     }
+        // });
+        document.addEventListener("DOMContentLoaded", async function () {
+        const authorSelect = document.getElementById("authorSelect");
+
+        // Загружаем список авторов для выбора
+        try {
+            const response = await fetch("http://localhost:8080/api/authors");
+            if (!response.ok) {
+                throw new Error("Ошибка при получении списка авторов");
+            }
+
+            const authors = await response.json();
+
+            // Заполняем список авторов
+            authors.forEach(author => {
+                const option = document.createElement("option");
+                option.value = author.id; // ID автора
+                option.textContent = author.fullName; // Имя автора
+                authorSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error("Ошибка:", error);
+            alert("Не удалось загрузить список авторов");
+        }
+
+        // Создание книги
+        document.getElementById("registerBtn").addEventListener("click", async function () {
+            const title = document.getElementById("fullName").value; // Название книги
+            const description = document.getElementById("bio").value; // Описание книги
+            const photo = document.getElementById("photo").files[0]; // Фото книги
+            const authorId = authorSelect.value; // ID выбранного автора (или пустое значение)
+
+            if (!title || !description) {
+                alert("Заполните все обязательные поля!");
+                return;
+            }
+
+            // Формируем данные для отправки
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("description", description);
+            if (photo) {
+                formData.append("photo", photo);
+            }
+            if (authorId) {
+                formData.append("authorId", authorId); // Привязываем автора
+            }
+
+            try {
+                const response = await fetch("http://localhost:8080/api/books", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    alert("Книга успешно создана!");
+                    document.getElementById("fullName").value = "";
+                    document.getElementById("bio").value = "";
+                    document.getElementById("photo").value = "";
+                    authorSelect.value = ""; // Сбрасываем выбор автора
+                } else {
+                    alert("Ошибка при создании книги!");
+                }
+            } catch (error) {
+                console.error("Ошибка:", error);
+                alert("Произошла ошибка при отправке данных!");
+            }
+        });
+    });
+
+    </script>
+</body>
+    

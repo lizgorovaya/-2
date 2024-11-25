@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOK SHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="js/script.js">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="/general.html" class="logo">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+            <span>BOOK SHOP</span>
+        </a>
+    </div>
+    <nav>
+        <a href="general.html">Главная</a>
+        <a href="catalog.html">Каталог</a>
+        <a href="authors.html">Авторы</a>
+        <a href="#">Рекомендации</a>
+    </nav>
+    <div class="auth-buttons">
+        <a href="autorization.html">
+            <button class="login-btn">Войти</button>
+        </a>
+        <a href="registration.html">
+            <button class="register-btn">Зарегистрироваться</button>
+        </a>
+        
+    </div>
+</header>
+
+<!-- <section class="hero">
+    <div class="hero-content">
+        <h1>Бестселлеры уже у нас в каталоге</h1>
+        <button class="more-btn">Подробнее</button>
+    </div>
+</section> -->
+<div class="watermark"></div>
+<section class="hero">
+    <div class="carousel">
+        <div class="slide active">
+            <img src="images/head1.jpg" alt="Изображение 1">
+            <div class="hero-content">
+                <h1>Первый слайд</h1>
+                <button class="more-btn">Узнать больше</button>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="images/head2.jpg" alt="Изображение 2">
+            <div class="hero-content">
+                <h1>Второй слайд</h1>
+                <button class="more-btn">Узнать больше</button>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="images/head3.jpg" alt="Изображение 3">
+            <div class="hero-content">
+                <h1>Третий слайд</h1>
+                <button class="more-btn">Узнать больше</button>
+            </div>
+        </div>
+    </div>
+    <!-- Пагинация -->
+    <div class="pagination">
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
+    </div>
+</section>
+
+<div class="main-content">
+    <div class="about">
+        <div class="text-container">
+            <h2>Коротко о нас</h2>
+            <p>BOOK SHOP — это место, где классика литературного мира переплетается с инновационными технологиями, создавая уникальное 
+                пространство для всех, кто любит книги и знания. Здесь можно найти не только литературу всех жанров, но и цифровые материалы, аудиокниги и интерактивные издания. В магазине регулярно проводятся встречи с
+                авторами, литературные мастер-классы и тематические лекции, превращающие чтение в увлекательное и насыщенное общение.</p>
+        </div>
+        <div class="image-container">
+            <img src="images/head4.png" alt="About Image" class="section-image">
+        </div>
+    </div>
+
+    <div class="recommendations">
+        <div class="image-container">
+            <img src="images/head5.png" alt="Recommendations Image" class="section-image">
+        </div>
+        <div class="text-container">
+            <h2>Рекомендательный сервис</h2>
+            <p>Рекомендательный сервис BOOK SHOP — это интеллектуальная система, которая помогает каждому читателю находить книги,
+                 максимально отвечающие его вкусам и интересам. Анализируя ваши предпочтения, прочитанные книги и отзывы,
+                 сервис предлагает персонализированные подборки литературы: от бестселлеров до малоизвестных жемчужин.</p>
+        </div>
+    </div>
+</div>
+
+
+
+<footer>
+    <div class="logo">
+        <a href="general.html">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+        </a>
+    </div>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Обработчик клика по кнопке
+        document.querySelector('.more-btn').addEventListener('click', function() {
+            alert('Переход на страницу с подробной информацией');
+        });
+    
+        // Карусель
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+    
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                slide.style.left = i === index ? '0' : '100%';
+            });
+            slides[index].classList.add('active');
+        }
+    
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+    
+        setInterval(nextSlide, 10000); // смена слайдов каждые 3 секунды
+    });
+
+        // Получаем все слайды и индикаторы
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+
+    // Функция для показа нужного слайда
+    function showSlide(index) {
+        // Убираем класс 'active' у всех слайдов и индикаторов
+        slides.forEach((slide) => slide.classList.remove('active'));
+        dots.forEach((dot) => dot.classList.remove('active'));
+
+        // Добавляем класс 'active' к выбранному слайду и индикатору
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+    }
+
+    // Добавляем обработчик событий на индикаторы
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlide(index);
+        });
+    });
+//     function createWatermarks() {
+//     // Заранее заданные координаты (top и left в процентах экрана)
+//     const predefinedPositions = [
+//         { top: 20, left: 15 }, // Позиция первого водяного знака
+//         { top: 350, left: 30 }, // Позиция второго водяного знака
+//         { top: 550, left: 60 }  // Позиция третьего водяного знака
+//     ];
+
+//     for (let i = 0; i < predefinedPositions.length; i++) {
+//         const position = predefinedPositions[i];
+
+//         const watermark = document.createElement('div');
+//         watermark.className = `watermark watermark-${i + 1}`;
+
+//         watermark.style.position = 'absolute';
+//         watermark.style.top = `${position.top}vh`;
+//         watermark.style.left = `${position.left}vw`;
+
+//         // Настройка стилей
+//         watermark.style.opacity = '0.5'; // Прозрачность
+//         watermark.style.fontSize = '150px'; // Размер шрифта
+//         watermark.style.fontWeight = 'light';
+//         watermark.style.color = '#cccccc'; // Цвет текста
+//         watermark.style.zIndex = '-1'; // За контентом
+//         watermark.style.pointerEvents = 'none'; // Нельзя кликнуть
+
+//         // Текст водяного знака
+//         watermark.innerText = 'BOOK SHOP';
+
+//         // Добавление элемента в DOM
+//         document.body.appendChild(watermark);
+
+//         // Логирование добавления
+//         console.log(`Водяной знак #${i + 1} добавлен на (${position.top}vh, ${position.left}vw)`);
+//     }
+// }
+
+// // Вызов функции
+// createWatermarks();
+    </script>
+
+</body>
+</html>

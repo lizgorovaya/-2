@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="css/auto.css">
+</head>
+<body>
+    <div class="container" autocomplete="on">
+        <p>АВТОРИЗАЦИЯ</p>
+        <input id="username" type="text" placeholder="Логин" autocomplete="username" required>
+        <input id="password" type="password" placeholder="Пароль" autocomplete="current-password" required>
+        <a href="registration.html">ЗАРЕГИСТРИРУЙСЯ</a>
+        <button type="submit" id="loginBtn">ВОЙТИ</button>
+    </div>
+</body>
+<script>
+document.getElementById("loginBtn").addEventListener("click", async function () {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            // Проверка на роль администратора
+            if (data.roles.includes("ROLE_ADMIN")) {
+                window.location.href = "admin.html"; // Перенаправление на панель администратора
+            } else {
+                window.location.href = "general.html"; // Перенаправление на главную страницу
+            }
+        } else {
+            alert("Ошибка авторизации: неверные данные");
+        }
+    } catch (error) {
+        alert("Произошла ошибка. Попробуйте еще раз.");
+    }
+});
+
+
+</script>
+</html>

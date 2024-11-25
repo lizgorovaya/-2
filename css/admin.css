@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&display=swap');
+
+/* Обнуляем отступы и границы у всех элементов */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Kumbh Sans', sans-serif;
+    color: #000000;
+    background-color: #FFFFFF;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+/* Стили логотипа */
+header .logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 400;
+    text-decoration: none;
+    color: inherit;
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+    margin-right: 10px;
+}
+
+header nav {
+    margin-left: 1020px;
+}
+
+header nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 400;
+}
+
+header nav a:hover {
+    color: #9C9C9C;
+}
+
+.auth-buttons {
+    display: flex;
+}
+
+.auth-buttons button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: 1px solid #D9D9D9;
+    background-color: #FFFFFF;
+    color: #000000;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+.auth-buttons button:hover {
+    background-color: #D9D9D9;
+}
+
+.auth-buttons .register-btn {
+    background-color: #ECE4E4;
+}
+
+.user-panel {
+    font-size: 25px;        /* Размер текста */
+    font-weight: 500;      /* Жирный текст */
+    color: #333;            /* Цвет текста */
+    text-transform: uppercase; /* Преобразование текста в верхний регистр */
+    padding: 10px;          /* Отступы внутри элемента */
+    border-radius: 5px;     /* Скругленные углы */
+    margin-left: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.menu {
+    display: flex;
+    gap: 10px;
+}
+.menu button {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.container {
+    padding: 20px;
+}
+.table {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+}
+.table th, .table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    font-family: 'Kumbh Sans', sans-serif;
+
+}
+
+thead th {
+    font-weight: normal; /* Убираем жирность текста */
+    font-family: 'Kumbh Sans', sans-serif; /* Добавляем шрифт для гармонии */
+}
+
+.status-button, .delete-button {
+    margin-left: 5px;
+    padding: 10px 20px;
+    border: 1px solid #D9D9D9;
+    background-color: #FFFFFF;
+    color: #000000;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+.status-button:hover, .delete-button:hover {
+    background-color: #D9D9D9; /* Цвет при наведении */
+}
+
+/* Специфичный стиль для кнопки с "особым" назначением */
+.delete-button {
+    background-color: #ECE4E4; /* Базовый цвет */
+}
+
+
+
+
+
+
+footer {
+    padding: 20px;
+    background-color: #FFFFFF;
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    font-family: 'Kumbh Sans', sans-serif;
+}

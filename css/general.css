@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&display=swap');
+
+/* Обнуляем отступы и границы у всех элементов */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Kumbh Sans', sans-serif;
+    color: #000000;
+    background-color: #FFFFFF;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+.fio {
+    font-size: 40px;
+    font-weight: 400;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+/* Стили логотипа */
+header .logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 400;
+    text-decoration: none;
+    color: inherit;
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+    margin-right: 10px;
+}
+
+header nav {
+    margin-left: 420px;
+}
+
+header nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 400;
+}
+
+header nav a:hover {
+    color: #9C9C9C;
+}
+
+.auth-buttons {
+    display: flex;
+}
+
+.auth-buttons button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: 1px solid #D9D9D9;
+    background-color: #FFFFFF;
+    color: #000000;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+.auth-buttons button:hover {
+    background-color: #D9D9D9;
+}
+
+.auth-buttons .register-btn {
+    background-color: #ECE4E4;
+}
+
+.container {
+    margin-top: 80px;
+    max-width: 1500px;
+    margin: 0; /* Убрано центрирование */
+    background-color: #fff;
+    padding: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+
+.title {
+    margin-top: 50px;
+    font-size: 40px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+.author-info {
+    margin-top: 50px;
+    max-width: 100%; /* Увеличена ширина почти на всю страницу */
+    width: 100%; /* Гарантирует адаптивность */
+    align-items: center;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    /* padding: 0 10px;  */
+}
+
+
+.author-info img {
+    max-width: 200px;
+    margin-left: 20px;
+}
+
+.section-title {
+    font-size: 40px;
+    font-weight: 400;
+    padding-top: 50px;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.bio-block {
+    max-width: 1500px; /* Максимальная ширина */
+    margin: 20px auto; /* Центрирование и внешний отступ */
+    line-height: 1.6; /* Улучшение читаемости */
+    font-family: 'Kumbh Sans', sans-serif;
+    font-size: 20px;
+}
+
+.bio-block ul li {
+    margin-bottom: 10px; /* Расстояние между элементами списка */
+}
+
+
+.background-text {
+    position: absolute;
+    font-size: 100px;
+    color: #e0e0e0;
+    z-index: -1;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+.works {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.works img {
+    max-width: 150px;
+    margin: 0 10px;
+}
+.author-info {
+    display: flex;
+    justify-content: space-between; /* Отправляем блоки на разные стороны */
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.author-info img {
+    width: 546px; /* Ширина изображения */
+    height: 436px; /* Высота изображения */
+    object-fit: cover; /* Обрезка, чтобы изображение вписывалось в размеры */
+    margin-right: 150px; /* Отступ слева от текста */
+    border: 1px solid #ccc; /* Для красоты, можно убрать */
+    border-radius: 2px; /* Скругленные края */
+}
+
+
+footer {
+    padding: 20px;
+    background-color: #FFFFFF;
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    font-family: 'Kumbh Sans', sans-serif;
+}

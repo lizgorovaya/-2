@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOK SHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="js/script.js">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="/general.html" class="logo">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+            <span>BOOK SHOP</span>
+        </a>
+    </div>
+    <nav>
+        <a href="general.html">Главная</a>
+        <a href="catalog.html">Каталог</a>
+        <a href="authors.html">Авторы</a>
+        <a href="#">Рекомендации</a>
+    </nav>
+    <div class="auth-buttons">
+        <a href="autorization.html">
+            <button class="login-btn">Войти</button>
+        </a>
+        <a href="registration.html">
+            <button class="register-btn">Зарегистрироваться</button>
+        </a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="fio"></div>
+    <div class="author-info">
+        <div>
+            <div class="section-title">Об авторе</div>
+            <div class="bio-block"></div>     
+        </div>
+    </div>
+
+    <div class="section-title">Популярные работы</div>
+    <div class="works">
+        <!-- Работы можно дополнить аналогично -->
+        <img src="work1.jpg" alt="Работа 1">
+        <img src="work2.jpg" alt="Работа 2">
+        <img src="work3.jpg" alt="Работа 3">
+    </div>
+</div>
+
+<script>
+    // Извлекаем ID автора из параметров URL
+    function fetchAuthorData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authorId = urlParams.get("id");
+
+    if (!authorId) {
+        console.error("ID автора не найден в URL");
+        alert("Ошибка: ID автора не указан.");
+        return;
+    }
+
+    return fetch(`http://localhost:8080/api/authors/${authorId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Автор не найден");
+            }
+            return response.json();
+        })
+        .then(author => {
+            console.log("Данные автора:", author);
+            document.querySelector(".fio").textContent = author.fullName;
+            document.querySelector(".bio-block").innerHTML = `<p>${author.bio}</p>`;
+            if (author.photo) {
+                const img = document.createElement("img");
+                img.src = `data:image/jpeg;base64,${author.photo}`;
+                img.alt = author.fullName;
+                document.querySelector(".author-info").appendChild(img);
+            }
+        })
+        .catch(error => {
+            console.error("Ошибка:", error);
+            alert("Не удалось загрузить данные автора");
+        });
+}
+
+// Вызов функции:
+fetchAuthorData();
+
+</script>
+
+<footer>
+    <div class="logo">
+        <a href="general.html">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+        </a>
+    </div>
+</footer>
+
+</body>
+</html>

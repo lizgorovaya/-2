@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOK SHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin1.css">
+    <link rel="stylesheet" href="js/script.js">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="/general.html" class="logo">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+            <span>BOOK SHOP</span>
+        </a>
+    </div>
+    <nav>
+        <a href="authors1.html">Авторы</a>
+    </nav>
+    <div class="auth-buttons">
+        <a href="autorization.html">
+            <button class="login-btn">Войти</button>
+        </a>
+        <a href="registration.html">
+            <button class="register-btn">Зарегистрироваться</button>
+        </a>
+        
+    </div>
+</header>
+
+<!DOCTYPE html>
+<html lang="ru">
+<body>
+    <div class="container">
+        <div class="user-panel">ПАНЕЛЬ ПОЛЬЗОВАТЕЛЕЙ</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ИМЯ</th>
+                    <th>ЛОГИН</th>
+                    <th>СТАТУС</th>
+                    <th>EMAIL</th>
+                    <th>УДАЛЕНИЕ</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- Данные пользователей будут добавлены здесь -->
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- Контейнер для ссылок на формы -->
+<!-- Контейнер для ссылок на формы -->
+    <div class="form-links">
+        <!-- Ссылка на форму добавления книги (слева) -->
+        <a href="add-book.html" class="add-book-link">Добавить книгу</a>
+
+        <!-- Ссылка на форму добавления автора (справа) -->
+        <a href="add-author.html" class="add-author-link">Добавить автора</a>
+    </div>
+
+
+    <script>
+        // Функция для загрузки пользователей из базы данных
+        // Функция для загрузки пользователей из базы данных
+        async function loadUsers() {
+            try {
+                const response = await fetch("http://localhost:8080/api/users", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (response.ok) {
+                    const users = await response.json();
+                    const tableBody = document.getElementById("userTableBody");
+                    tableBody.innerHTML = "";
+                    users.forEach(user => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.username}</td>
+                            <td><button class="status-button">${user.active ? 'UNBLOCK' : 'BLOCK'}</button></td>
+                            <td>${user.email}</td>
+                            <td><button class="delete-button">УДАЛИТЬ</button></td>
+                        `;
+                        tableBody.appendChild(row);
+
+                        // Привязываем обработчики событий
+                const statusButton = row.querySelector('.status-button');
+                const deleteButton = row.querySelector('.delete-button');
+
+                // Обработчик для кнопки блокировки/разблокировки
+                statusButton.addEventListener('click', () => {
+                    toggleUserStatus(user.id, user.active);
+                });
+
+                // Обработчик для кнопки удаления
+                deleteButton.addEventListener('click', () => {
+                    deleteUser(user.id);
+                });
+                    });
+                } else {
+                    alert("Ошибка при получении данных");
+                }
+            } catch (error) {
+                alert("Произошла ошибка. Попробуйте еще раз.");
+            }
+        }
+
+        // Загружаем пользователей при загрузке страницы
+        window.onload = loadUsers;
+
+        // Функция для блокировки или разблокировки пользователя
+        async function toggleUserStatus(userId, currentStatus) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/users/${userId}/status`, {
+                    method: 'PATCH', // Используем PATCH для частичного обновления данных
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ active: !currentStatus }) // Меняем статус на противоположный
+                });
+
+                if (response.ok) {
+                    loadUsers();  // Перезагружаем список пользователей
+                } else {
+                    alert('Ошибка при обновлении статуса пользователя');
+                }
+            } catch (error) {
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            }
+        }
+
+        // Добавляем обработчик событий для кнопок блокировки/разблокировки
+        document.querySelectorAll('.status-button').forEach((button, index) => {
+            const userId = users[index].id;
+            const currentStatus = users[index].active;  // Текущий статус пользователя
+            button.addEventListener('click', () => {
+                toggleUserStatus(userId, currentStatus);
+            });
+        });
+
+
+
+
+       // Функция для удаления пользователя
+    async function deleteUser(userId) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                loadUsers();  // Перезагружаем список пользователей
+            } else {
+                alert('Ошибка при удалении пользователя');
+            }
+        } catch (error) {
+            alert('Произошла ошибка. Попробуйте еще раз.');
+        }
+    }
+
+    // Добавляем обработчик событий для кнопок удаления
+    document.querySelectorAll('.delete-button').forEach((button, index) => {
+        const userId = users[index].id;  // Получаем ID пользователя
+        button.addEventListener('click', () => {
+            deleteUser(userId);
+        });
+    });
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="css/auto.css">
+</head>
+<body>
+    <div class="container">
+        <p>РЕГИСТРАЦИЯ</p>
+        <input type="text" id="name" placeholder="Имя" required>
+        <input type="text" id="email" placeholder="Электронная почта" required>
+        <input type="text" id="username" placeholder="Логин" required>
+        <input type="password" id="password" placeholder="Пароль" required>
+
+        <button id="registerBtn">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+
+    </div>
+</body>
+
+
+
+<script>
+   document.getElementById("registerBtn").addEventListener("click", async function () {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, username, password })
+        });
+
+        if (response.ok) {
+            alert("Регистрация успешна");
+            // Переход на главную страницу
+            window.location.href = "general.html"; // Укажите путь к главной странице
+        } else {
+            alert("Ошибка регистрации: пользователь уже существует");
+        }
+    } catch (error) {
+        console.error("Ошибка при регистрации:", error);
+        alert("Произошла ошибка. Попробуйте еще раз.");
+    }
+});
+
+</script>
+
+
+</html>

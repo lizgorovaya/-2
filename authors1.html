@@ -1,0 +1,90 @@
+<!-- authors.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOK SHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/authors1.css">
+    <link rel="stylesheet" href="js/script.js">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="/general.html" class="logo">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+            <span>BOOK SHOP</span>
+        </a>
+    </div>
+    <nav>
+        <a href="general.html">Главная</a>
+        <a href="catalog.html">Каталог</a>
+        <a href="authors.html">Авторы</a>
+        <a href="#">Рекомендации</a>
+    </nav>
+    <div class="auth-buttons">
+        <a href="autorization.html">
+            <button class="login-btn">Войти</button>
+        </a>
+        <a href="registration.html">
+            <button class="register-btn">Зарегистрироваться</button>
+        </a>
+    </div>
+</header>
+
+<div class="section-title">АВТОРЫ</div>
+<div class="authors-container">
+    <div id="authors-grid" class="authors-grid"></div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        try {
+            const response = await fetch("http://localhost:8080/api/authors");
+            if (!response.ok) {
+                throw new Error("Ошибка при получении списка авторов");
+            }
+
+            const authors = await response.json();
+            const authorsGrid = document.getElementById("authors-grid");
+
+            authors.forEach(author => {
+                const authorCard = document.createElement("div");
+                authorCard.className = "author-card";
+
+                const img = document.createElement("img");
+                img.src = author.photo ? `data:image/jpeg;base64,${author.photo}` : "placeholder.jpg";
+                img.alt = author.fullName;
+
+                const nameLink = document.createElement("a");
+                console.log("ID автора:", author.id);
+                nameLink.href = `authors.html?id=${authors.id}`;
+                nameLink.textContent = author.fullName;
+
+                const name = document.createElement("p");
+                name.appendChild(nameLink);
+
+                authorCard.appendChild(img);
+                authorCard.appendChild(name);
+
+                authorsGrid.appendChild(authorCard);
+            });
+        } catch (error) {
+            console.error("Ошибка:", error);
+            alert("Не удалось загрузить список авторов");
+        }
+    });
+</script>
+
+<footer>
+    <div class="logo">
+        <a href="general.html">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+        </a>
+    </div>
+</footer>
+
+</body>
+</html>
