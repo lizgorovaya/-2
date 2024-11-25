@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -56,6 +57,9 @@
     function fetchAuthorData() {
     const urlParams = new URLSearchParams(window.location.search);
     const authorId = urlParams.get("id");
+
+    console.log("URL параметры:", window.location.search); // Лог для проверки
+    console.log("ID автора:", authorId); // Лог для отладки
 
     if (!authorId) {
         console.error("ID автора не найден в URL");
