@@ -21,7 +21,7 @@
     <nav>
         <a href="general.html">Главная</a>
         <a href="catalog.html">Каталог</a>
-        <a href="authors.html">Авторы</a>
+        <a href="authors1.html">Авторы</a>
         <a href="#">Рекомендации</a>
     </nav>
     <div class="auth-buttons">
@@ -45,10 +45,7 @@
 
     <div class="section-title">Популярные работы</div>
     <div class="works">
-        <!-- Работы можно дополнить аналогично -->
-        <img src="work1.jpg" alt="Работа 1">
-        <img src="work2.jpg" alt="Работа 2">
-        <img src="work3.jpg" alt="Работа 3">
+        
     </div>
 </div>
 
@@ -93,6 +90,85 @@
 
 // Вызов функции:
 fetchAuthorData();
+
+
+// Функция для извлечения ID автора из URL
+function getAuthorIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authorId = urlParams.get("id");
+
+    if (!authorId) {
+        console.error("ID автора не найден в URL");
+        alert("Ошибка: ID автора не указан.");
+        return null;
+    }
+    
+    return authorId;
+}
+
+function fetchBooksByAuthor(authorId) {
+    fetch(`http://localhost:8080/api/books/by-author/${authorId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Не удалось загрузить книги автора");
+            }
+            return response.json(); // Получаем список книг
+        })
+        .then(books => {
+            console.log("Книги автора:", books);
+
+            const worksContainer = document.querySelector(".works");
+
+            if (!worksContainer) {
+                console.error("Контейнер для книг не найден!");
+                return;
+            }
+
+            worksContainer.innerHTML = ""; // Очищаем блок перед добавлением
+
+            if (books.length === 0) {
+                worksContainer.innerHTML = "<p>У автора пока нет опубликованных книг.</p>";
+                return;
+            }
+
+            books.forEach(book => {
+                fetch(`http://localhost:8080/api/books/${book.id}/cover`)
+                    .then(response => {
+                        if (!response.ok) {
+                            console.warn(`Обложка для книги ${book.id} отсутствует`);
+                            return null; // Если нет обложки, продолжаем обработку
+                        }
+                        return response.blob(); // Получаем Blob данных
+                    })
+                    .then(imageBlob => {
+                        if (imageBlob) {
+                            const imageUrl = URL.createObjectURL(imageBlob);
+                            const img = document.createElement("img");
+                            img.src = imageUrl;
+                            img.alt = book.title || "Обложка книги";
+                            worksContainer.appendChild(img); // Добавляем изображение в контейнер
+                        }
+                    })
+                    .catch(error => {
+                        console.error(`Ошибка загрузки обложки для книги ${book.id}:`, error);
+                    });
+            });
+        })
+        .catch(error => {
+            console.error("Ошибка загрузки книг автора:", error);
+            alert("Не удалось загрузить книги автора.");
+        });
+}
+
+
+// Вызов функции для загрузки книг
+const authorId = new URLSearchParams(window.location.search).get("id");
+if (authorId) {
+    fetchBooksByAuthor(authorId);
+} else {
+    console.error("ID автора не найден в URL.");
+    alert("Ошибка: ID автора не указан.");
+}
 
 </script>
 
