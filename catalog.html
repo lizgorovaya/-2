@@ -24,9 +24,9 @@
         <a href="#">Рекомендации</a>
     </nav>
     <div class="auth-buttons">
-        <a href="autorization.html">
-            <button class="login-btn">Войти</button>
-        </a>
+        <button class="login-btn">
+            Войти
+        </button>
         <a href="registration.html">
             <button class="register-btn">Зарегистрироваться</button>
         </a>
@@ -39,7 +39,119 @@
     <button class="button">ФИЛЬТРОВАТЬ</button>
 </div>
 
+<div class="books-container" id="books-container"></div>
+<script>
 
+// document.addEventListener("DOMContentLoaded", () => {
+//     const container = document.getElementById("books-container");
+
+//     fetch("http://localhost:8080/api/books/images")
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error(`HTTP error! status: ${response.status}`);
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             data.forEach(book => {
+//                 if (book.image) {
+//                     // Создаем контейнер для каждой книги
+//                     const bookContainer = document.createElement("div");
+//                     bookContainer.classList.add("book-item");
+
+//                     // Создаем изображение книги
+//                     const img = document.createElement("img");
+//                     img.src = book.image; // Base64 строка изображения
+//                     img.alt = "Book Cover";
+//                     img.style.cursor = "pointer"; // Добавляем курсор для указания кликабельности
+
+//                     // Создаем элемент для названия книги
+//                     const title = document.createElement("div");
+//                     title.classList.add("book-title");
+//                     title.textContent = book.title; // Название книги
+
+//                     // Добавляем обработчик клика по картинке
+//                     img.addEventListener("click", () => {
+//                         // Переход на страницу книги
+//                         window.location.href = `/book/${book.id}`;
+//                     });
+
+//                     // Добавляем картинку и название в контейнер
+//                     bookContainer.appendChild(img);
+//                     bookContainer.appendChild(title);
+
+//                     // Добавляем контейнер книги в основной контейнер
+//                     container.appendChild(bookContainer);
+//                 }
+//             });
+//         })
+//         .catch(error => console.error("Error fetching book images:", error));
+// });
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("books-container");
+
+    fetch("http://localhost:8080/api/books/images")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            data.forEach(book => {
+                if (book.image) {
+                    // Создаем контейнер для каждой книги
+                    const bookContainer = document.createElement("div");
+                    bookContainer.classList.add("book-item");
+
+                    // Создаем изображение книги
+                    const img = document.createElement("img");
+                    img.src = book.image; // Base64 строка изображения
+                    img.alt = book.title || "Book Cover";
+                    img.style.cursor = "pointer"; // Добавляем курсор для указания кликабельности
+
+                    // Создаем элемент для названия книги
+                    const title = document.createElement("div");
+                    title.classList.add("book-title");
+                    title.textContent = book.title || "Без названия"; // Название книги
+
+                    // Добавляем обработчик клика по картинке
+                    img.addEventListener("click", () => {
+                        // Переход на страницу книги с переданным ID
+                        window.location.href = `/book.html?id=${book.id}`;
+                    });
+
+                    // Добавляем картинку и название в контейнер
+                    bookContainer.appendChild(img);
+                    bookContainer.appendChild(title);
+
+                    // Добавляем контейнер книги в основной контейнер
+                    container.appendChild(bookContainer);
+                }
+            });
+        })
+        .catch(error => console.error("Error fetching book images:", error));
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const loginButton = document.querySelector('.login-btn');
+    // Проверяем статус авторизации
+
+    if (localStorage.getItem("isLoggedIn")) {
+        loginButton.textContent = 'Выйти'; // Меняем текст кнопки
+        loginButton.addEventListener('click', () => {
+            localStorage.removeItem("isLoggedIn");
+            window.location = "autorization.html";
+            console.log("CHECK")
+            // location.reload(); // Перезагрузка страницы
+        });
+    } else {
+        loginButton.addEventListener('click', () => {
+            window.location = "autorization.html";
+        })
+    }
+});
+</script>
 <footer>
     <div class="logo">
         <a href="general.html">

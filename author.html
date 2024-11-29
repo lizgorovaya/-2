@@ -25,9 +25,9 @@
         <a href="#">Рекомендации</a>
     </nav>
     <div class="auth-buttons">
-        <a href="autorization.html">
-            <button class="login-btn">Войти</button>
-        </a>
+        <button class="login-btn">
+            Войти
+        </button>
         <a href="registration.html">
             <button class="register-btn">Зарегистрироваться</button>
         </a>
@@ -131,29 +131,58 @@ function fetchBooksByAuthor(authorId) {
                 return;
             }
 
-            books.forEach(book => {
-                fetch(`http://localhost:8080/api/books/${book.id}/cover`)
-                    .then(response => {
-                        if (!response.ok) {
-                            console.warn(`Обложка для книги ${book.id} отсутствует`);
-                            return null; // Если нет обложки, продолжаем обработку
-                        }
-                        return response.blob(); // Получаем Blob данных
-                    })
-                    .then(imageBlob => {
-                        if (imageBlob) {
-                            const imageUrl = URL.createObjectURL(imageBlob);
-                            const img = document.createElement("img");
-                            img.src = imageUrl;
-                            img.alt = book.title || "Обложка книги";
-                            worksContainer.appendChild(img); // Добавляем изображение в контейнер
-                        }
-                    })
-                    .catch(error => {
-                        console.error(`Ошибка загрузки обложки для книги ${book.id}:`, error);
-                    });
-            });
-        })
+        //     books.forEach(book => {
+        //         fetch(`http://localhost:8080/api/books/${book.id}/cover`)
+        //             .then(response => {
+        //                 if (!response.ok) {
+        //                     console.warn(`Обложка для книги ${book.id} отсутствует`);
+        //                     return null; // Если нет обложки, продолжаем обработку
+        //                 }
+        //                 return response.blob(); // Получаем Blob данных
+        //             })
+        //             .then(imageBlob => {
+        //                 if (imageBlob) {
+        //                     const imageUrl = URL.createObjectURL(imageBlob);
+        //                     const img = document.createElement("img");
+        //                     img.src = imageUrl;
+        //                     img.alt = book.title || "Обложка книги";
+        //                     worksContainer.appendChild(img); // Добавляем изображение в контейнер
+        //                 }
+        //             })
+        //             .catch(error => {
+        //                 console.error(`Ошибка загрузки обложки для книги ${book.id}:`, error);
+        //             });
+        //     });
+        // })
+        books.forEach(book => {
+            fetch(`http://localhost:8080/api/books/${book.id}/cover`)
+                .then(response => {
+                    if (!response.ok) {
+                        console.warn(`Обложка для книги ${book.id} отсутствует`);
+                        return null; // Если нет обложки, продолжаем обработку
+                    }
+                    return response.blob(); // Получаем Blob данных
+                })
+                .then(imageBlob => {
+                    if (imageBlob) {
+                        const imageUrl = URL.createObjectURL(imageBlob);
+                        const img = document.createElement("img");
+                        img.src = imageUrl;
+                        img.alt = book.title || "Обложка книги";
+
+                        // Создаём ссылку, оборачивающую изображение
+                        const link = document.createElement("a");
+                        link.href = `/book.html?id=${book.id}`; // Ссылка на страницу книги
+                        link.appendChild(img); // Вставляем изображение внутрь ссылки
+
+                        worksContainer.appendChild(link); // Добавляем ссылку в контейнер
+                    }
+                })
+                .catch(error => {
+                    console.error(`Ошибка загрузки обложки для книги ${book.id}:`, error);
+                });
+        });
+    })
         .catch(error => {
             console.error("Ошибка загрузки книг автора:", error);
             alert("Не удалось загрузить книги автора.");
@@ -169,6 +198,26 @@ if (authorId) {
     console.error("ID автора не найден в URL.");
     alert("Ошибка: ID автора не указан.");
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const loginButton = document.querySelector('.login-btn');
+    // Проверяем статус авторизации
+
+    if (localStorage.getItem("isLoggedIn")) {
+        loginButton.textContent = 'Выйти'; // Меняем текст кнопки
+        loginButton.addEventListener('click', () => {
+            localStorage.removeItem("isLoggedIn");
+            window.location = "autorization.html";
+            console.log("CHECK")
+            // location.reload(); // Перезагрузка страницы
+        });
+    } else {
+        loginButton.addEventListener('click', () => {
+            window.location = "autorization.html";
+        })
+    }
+});
+
 
 </script>
 

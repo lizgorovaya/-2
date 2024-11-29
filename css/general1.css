@@ -82,49 +82,65 @@ header nav a:hover {
 .auth-buttons .register-btn {
     background-color: #ECE4E4;
 }
-.section-title {
-    margin-top: 20px;
-    font-size: 40px;
-    font-weight: 400;
-    margin-bottom: 10px;
-    font-family: 'Montserrat', sans-serif;
-    margin-left: 120px;
-    color: inherit;
-    color: #000000;
+
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
     margin-top: 100px;
 }
 
-
-.authors-container {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 20px;
+.book-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
 }
 
-.authors-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Размещаем ровно 2 колонки */
-    gap: 50px; /* Отступы между карточками */
-    justify-items: center; /* Центруем элементы внутри колонок */
-    margin-top: 20px;
+.book-cover {
+    display: flex; /* Включаем flexbox */
+    justify-content: flex-end; /* Сдвигаем содержимое вправо */
+    width: 100%; /* Убедимся, что контейнер занимает всю ширину */
 }
 
-.author-card {
-    text-align: center;
-}
-
-.author-card img {
-    width: 300px;
-    height: 300px;
+.book-cover img {
+    margin-top: -60px;
+    width: 400px;
+    height: 400px;
     object-fit: cover;
-    margin-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+
+.text-content {
+    flex: 1;
+}
+
+.book-title {
+    margin-top: 80px;
+    font-size: 40px;
+    font-weight: 400;
+    margin-bottom: 10px; /* Отступ под заголовком */
+    font-family: 'Montserrat', sans-serif;
+    color: #000000;
+    text-align: left; /* Выравнивание текста слева */
+}
+
+.book-description {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-top: -200px; /* Убираем верхний отступ, если есть */
+    text-align: left; /* Выравнивание текста слева */
+}
+
 
 
 footer {
     padding: 20px;
     background-color: #FFFFFF;
     text-align: center;
+    margin-top: 280px;
 }
 
 .footer-logo {

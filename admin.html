@@ -21,9 +21,9 @@
         <a href="authors1.html">Авторы</a>
     </nav>
     <div class="auth-buttons">
-        <a href="autorization.html">
-            <button class="login-btn">Войти</button>
-        </a>
+        <button class="login-btn">
+            Войти
+        </button>
         <a href="registration.html">
             <button class="register-btn">Зарегистрироваться</button>
         </a>
@@ -176,6 +176,24 @@
         });
     });
 
+        document.addEventListener('DOMContentLoaded', () => {
+        const loginButton = document.querySelector('.login-btn');
+        // Проверяем статус авторизации
+
+        if (localStorage.getItem("isLoggedIn")) {
+            loginButton.textContent = 'Выйти'; // Меняем текст кнопки
+            loginButton.addEventListener('click', () => {
+                localStorage.removeItem("isLoggedIn");
+                window.location = "autorization.html";
+                console.log("CHECK")
+                // location.reload(); // Перезагрузка страницы
+            });
+        } else {
+            loginButton.addEventListener('click', () => {
+                window.location = "autorization.html";
+            })
+        }
+    });
 
     </script>
 </body>

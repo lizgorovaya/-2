@@ -24,9 +24,9 @@
         <a href="#">Рекомендации</a>
     </nav>
     <div class="auth-buttons">
-        <a href="autorization.html">
-            <button class="login-btn">Войти</button>
-        </a>
+        <button class="login-btn">
+            Войти
+        </button>
         <a href="registration.html">
             <button class="register-btn">Зарегистрироваться</button>
         </a>
@@ -157,45 +157,24 @@
             showSlide(index);
         });
     });
-//     function createWatermarks() {
-//     // Заранее заданные координаты (top и left в процентах экрана)
-//     const predefinedPositions = [
-//         { top: 20, left: 15 }, // Позиция первого водяного знака
-//         { top: 350, left: 30 }, // Позиция второго водяного знака
-//         { top: 550, left: 60 }  // Позиция третьего водяного знака
-//     ];
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginButton = document.querySelector('.login-btn');
+        // Проверяем статус авторизации
 
-//     for (let i = 0; i < predefinedPositions.length; i++) {
-//         const position = predefinedPositions[i];
-
-//         const watermark = document.createElement('div');
-//         watermark.className = `watermark watermark-${i + 1}`;
-
-//         watermark.style.position = 'absolute';
-//         watermark.style.top = `${position.top}vh`;
-//         watermark.style.left = `${position.left}vw`;
-
-//         // Настройка стилей
-//         watermark.style.opacity = '0.5'; // Прозрачность
-//         watermark.style.fontSize = '150px'; // Размер шрифта
-//         watermark.style.fontWeight = 'light';
-//         watermark.style.color = '#cccccc'; // Цвет текста
-//         watermark.style.zIndex = '-1'; // За контентом
-//         watermark.style.pointerEvents = 'none'; // Нельзя кликнуть
-
-//         // Текст водяного знака
-//         watermark.innerText = 'BOOK SHOP';
-
-//         // Добавление элемента в DOM
-//         document.body.appendChild(watermark);
-
-//         // Логирование добавления
-//         console.log(`Водяной знак #${i + 1} добавлен на (${position.top}vh, ${position.left}vw)`);
-//     }
-// }
-
-// // Вызов функции
-// createWatermarks();
+        if (localStorage.getItem("isLoggedIn")) {
+            loginButton.textContent = 'Выйти'; // Меняем текст кнопки
+            loginButton.addEventListener('click', () => {
+                localStorage.removeItem("isLoggedIn");
+                window.location = "autorization.html";
+                console.log("CHECK")
+                // location.reload(); // Перезагрузка страницы
+            });
+        } else {
+            loginButton.addEventListener('click', () => {
+                window.location = "autorization.html";
+            })
+        }
+    });
     </script>
 
 </body>

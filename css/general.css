@@ -21,6 +21,10 @@ header {
     padding: 20px 40px;
     background-color: #FFFFFF;
     border-bottom: 1px solid #D9D9D9;
+    position: fixed; /* Фиксация хедера */
+    top: 0; /* Расположение у верхнего края */
+    width: 100%; /* Ширина на весь экран */
+    z-index: 1;
 }
 
 .fio {
@@ -29,6 +33,7 @@ header {
     margin-top: 50px;
     margin-bottom: 10px;
     font-family: 'Montserrat', sans-serif;
+    margin-top: 100px;
 }
 
 
@@ -158,16 +163,34 @@ header nav a:hover {
 }
 
 .works {
+    margin-top: 50px;
     display: flex;
+    flex-wrap: wrap;
+    row-gap: 120px;
     justify-content: space-between;
-    margin-top: 20px;
+}
+
+.works a {
+    display: block;
+    width: calc((100% - 240px) / 3);
+    height: 340px;
+    text-decoration: none;
+    overflow: hidden;
+    border: 1px solid #ddd;
 }
 
 .works img {
-    max-width: 150px;
-    margin: 0 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
 }
+
+
+
+
 .author-info {
+    width: 100%;
     display: flex;
     justify-content: space-between; /* Отправляем блоки на разные стороны */
     align-items: flex-start;
@@ -175,10 +198,10 @@ header nav a:hover {
 }
 
 .author-info img {
-    width: 546px; /* Ширина изображения */
+    max-width: 40%;
     height: 436px; /* Высота изображения */
-    object-fit: cover; /* Обрезка, чтобы изображение вписывалось в размеры */
-    margin-right: 150px; /* Отступ слева от текста */
+    object-fit: cover; 
+    /* margin-right: 150px;  */
     border: 1px solid #ccc; /* Для красоты, можно убрать */
     border-radius: 2px; /* Скругленные края */
 }
