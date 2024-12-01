@@ -39,7 +39,8 @@
     <div class="author-info">
         <div>
             <div class="section-title">Об авторе</div>
-            <div class="bio-block"></div>     
+            <div class="bio-block"></div> 
+            <button id="actionButton" class="styled-button"></button>    
         </div>
     </div>
 
@@ -48,6 +49,9 @@
         
     </div>
 </div>
+
+
+
 
 <script>
     // Извлекаем ID автора из параметров URL
@@ -217,6 +221,50 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 });
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const storedRoles = sessionStorage.getItem("userRoles");
+    const userRoles = storedRoles ? JSON.parse(storedRoles) : [];
+    const authorId = getAuthorIdFromURL();
+    const actionButton = document.getElementById("actionButton");
+
+    if (!authorId) {
+        alert("ID автора не указан.");
+        window.location.href = "catalog.html";
+        return;
+    }
+
+    if (userRoles.includes("ROLE_ADMIN")) {
+        actionButton.style.display = "block";
+        actionButton.innerText = "Удалить автора";
+
+        actionButton.addEventListener("click", async () => {
+            const confirmation = confirm("Вы уверены, что хотите удалить автора и все его книги?");
+            if (confirmation) {
+                try {
+                    const response = await fetch(
+                        `http://localhost:8080/api/authors/${authorId}`,
+                        { method: "DELETE" }
+                    );
+                    if (response.ok) {
+                        alert("Автор и его книги успешно удалены.");
+                        window.location.href = "catalog.html";
+                    } else {
+                        alert("Ошибка при удалении автора.");
+                    }
+                } catch (error) {
+                    alert("Произошла ошибка. Попробуйте ещё раз.");
+                    console.error("Ошибка при удалении автора:", error);
+                }
+            }
+        });
+    }
+});
+
+// function getAuthorIdFromURL() {
+//     const params = new URLSearchParams(window.location.search);
+//     return params.get("authorId");
+// }
 
 
 </script>

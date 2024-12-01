@@ -45,6 +45,9 @@
         </div>
 </div>
 
+
+<button id="actionButton" class="styled-button"></button>
+
 <script>
    function fetchBookData() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -110,6 +113,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    // Извлекаем роли из sessionStorage
+    const storedRoles = sessionStorage.getItem("userRoles");
+    const userRoles = storedRoles ? JSON.parse(storedRoles) : [];
+
+    // Получаем ссылку на кнопку
+    const actionButton = document.getElementById("actionButton");
+
+    // Проверяем, если роли существуют
+    if (userRoles.length > 0) {
+        if (userRoles.includes("ROLE_ADMIN")) {
+            // Изменяем текст кнопки для администратора
+            actionButton.innerText = "Удалить книгу";
+
+            // Назначаем обработчик для администратора
+            actionButton.addEventListener("click", async () => {
+                const bookId = getBookIdFromURL(); // Получаем ID книги из URL
+                const confirmation = confirm("Вы уверены, что хотите удалить книгу?");
+                if (confirmation) {
+                    try {
+                        const response = await fetch(`http://localhost:8080/api/books/${bookId}`, {
+                            method: "DELETE",
+                        });
+                        if (response.ok) {
+                            alert("Книга успешно удалена.");
+                            window.location.href = "catalog.html"; // Перенаправление после удаления
+                        } else {
+                            alert("Ошибка при удалении книги.");
+                        }
+                    } catch (error) {
+                        alert("Произошла ошибка. Попробуйте ещё раз.");
+                        console.error("Ошибка при удалении книги:", error);
+                    }
+                }
+            });
+        } else if (userRoles.includes("ROLE_USER")) {
+            // Изменяем текст кнопки для обычного пользователя
+            actionButton.innerText = "Оставить отзыв";
+
+            // Назначаем обработчик для обычного пользователя
+            actionButton.addEventListener("click", () => {
+                // Перенаправление на страницу книги
+                window.location.href = "user-dashboard.html"; // Укажите правильный URL страницы
+            });
+        } else {
+            alert("Неизвестная роль!");
+        }
+    } else {
+        alert("Пользователь не авторизован!");
+        window.location.href = "login.html"; // Перенаправление на страницу логина
+    }
+});
+
+// Функция для извлечения ID книги из URL (например, ?id=123)
+function getBookIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
+}
 
 
 </script>

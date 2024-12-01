@@ -134,6 +134,21 @@ header nav a:hover {
     text-align: left; /* Выравнивание текста слева */
 }
 
+.styled-button {
+    margin-top: 15px;
+    margin-left:270px;
+    padding: 10px 20px;
+    border: 1px solid #D9D9D9;
+    background-color: #FFFFFF;
+    color: #000000;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+.styled-button:hover {
+    background-color: #D9D9D9;
+}
 
 
 footer {

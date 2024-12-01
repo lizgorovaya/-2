@@ -111,14 +111,34 @@ header nav a:hover {
 
 .author-card {
     text-align: center;
+    
 }
+
+.author-card a {
+    color: black;
+    text-decoration: none; /* Optional: removes the underline */
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+
 
 .author-card img {
     width: 300px;
     height: 300px;
     object-fit: cover;
     margin-bottom: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    
 }
+
+.author-card img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
 
 
 footer {

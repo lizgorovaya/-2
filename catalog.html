@@ -35,62 +35,33 @@
 </header>
 
 <div class="button-container">
-    <button class="button">СОРТИРОВАТЬ</button>
-    <button class="button">ФИЛЬТРОВАТЬ</button>
+    <button class="button" id="sortButton">СОРТИРОВАТЬ</button>
+    <button class="button" id="filterButton">ФИЛЬТРОВАТЬ</button>
+</div>
+
+<!-- Всплывающее окно для сортировки -->
+<div class="dropdown" id="sortDropdown">
+    <div class="dropdown-content">
+        <button id="sortByTitle" class="dropdown-button">По алфавиту</button>
+        <button id="sortByDate" class="dropdown-button">По дате создания</button>
+    </div>
+</div>
+
+<!-- Всплывающее окно для фильтрации (пока пустое, но можно добавить фильтры) -->
+<div class="dropdown" id="filterDropdown">
+    <div class="dropdown-content">
+        <button class="dropdown-button">Фильтр 1</button>
+        <button class="dropdown-button">Фильтр 2</button>
+    </div>
 </div>
 
 <div class="books-container" id="books-container"></div>
 <script>
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     const container = document.getElementById("books-container");
-
-//     fetch("http://localhost:8080/api/books/images")
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error(`HTTP error! status: ${response.status}`);
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             data.forEach(book => {
-//                 if (book.image) {
-//                     // Создаем контейнер для каждой книги
-//                     const bookContainer = document.createElement("div");
-//                     bookContainer.classList.add("book-item");
-
-//                     // Создаем изображение книги
-//                     const img = document.createElement("img");
-//                     img.src = book.image; // Base64 строка изображения
-//                     img.alt = "Book Cover";
-//                     img.style.cursor = "pointer"; // Добавляем курсор для указания кликабельности
-
-//                     // Создаем элемент для названия книги
-//                     const title = document.createElement("div");
-//                     title.classList.add("book-title");
-//                     title.textContent = book.title; // Название книги
-
-//                     // Добавляем обработчик клика по картинке
-//                     img.addEventListener("click", () => {
-//                         // Переход на страницу книги
-//                         window.location.href = `/book/${book.id}`;
-//                     });
-
-//                     // Добавляем картинку и название в контейнер
-//                     bookContainer.appendChild(img);
-//                     bookContainer.appendChild(title);
-
-//                     // Добавляем контейнер книги в основной контейнер
-//                     container.appendChild(bookContainer);
-//                 }
-//             });
-//         })
-//         .catch(error => console.error("Error fetching book images:", error));
-// });
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("books-container");
 
-    fetch("http://localhost:8080/api/books/images")
+        fetch("http://localhost:8080/api/books/images")
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -151,6 +122,112 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 });
+// Получаем элементы
+const sortButton = document.getElementById('sortButton');
+const filterButton = document.getElementById('filterButton');
+const sortDropdown = document.getElementById('sortDropdown');
+const filterDropdown = document.getElementById('filterDropdown');
+
+// Получаем кнопки внутри всплывающих окон
+const sortByTitle = document.getElementById('sortByTitle');
+const sortByDate = document.getElementById('sortByDate');
+
+// Обработчик клика на кнопку "СОРТИРОВАТЬ"
+sortButton.addEventListener('click', function(event) {
+    sortDropdown.classList.toggle('show'); // Открываем/закрываем меню сортировки
+    filterDropdown.classList.remove('show'); // Закрываем меню фильтрации, если оно открыто
+});
+
+// Обработчик клика на кнопку "ФИЛЬТРОВАТЬ"
+filterButton.addEventListener('click', function(event) {
+    filterDropdown.classList.toggle('show'); // Открываем/закрываем меню фильтрации
+    sortDropdown.classList.remove('show'); // Закрываем меню сортировки, если оно открыто
+});
+
+// Обработчики сортировки (удалил дублирование)
+sortByTitle.addEventListener('click', function(event) {
+    event.preventDefault(); // Предотвращаем переход по ссылке
+    fetchBooks('title'); // Запрашиваем сортировку по алфавиту
+    sortDropdown.classList.remove('show'); // Закрываем окно после выбора
+});
+
+sortByDate.addEventListener('click', function(event) {
+    event.preventDefault(); // Предотвращаем переход по ссылке
+    fetchBooks('date'); // Запрашиваем сортировку по дате
+    sortDropdown.classList.remove('show'); // Закрываем окно после выбора
+});
+
+// Функция для отправки запроса на сервер для сортировки
+function fetchBooks(sortBy) {
+    let url = '';
+
+    if (sortBy === 'title') {
+        url = 'http://localhost:8080/api/books/sort/title'; // указываем полный путь
+    } else if (sortBy === 'date') {
+        url = 'http://localhost:8080/api/books/sort/date'; // указываем полный путь
+    }
+
+    console.log(`Запрос на сортировку: ${url}`); // Логируем, чтобы убедиться, что запрос отправляется только один раз
+
+    // Отправляем GET-запрос на сервер
+    fetch(url)
+        .then(response => response.json())
+        .then(books => {
+            console.log(books); // Выводим данные для отладки
+            updateBookList(books); // Обновляем список книг на странице
+        })
+        .catch(error => {
+            console.error('Ошибка при получении данных:', error);
+        });
+}
+
+// Обновляем список книг
+function updateBookList(books) {
+    const booksContainer = document.querySelector('.books-container');
+    booksContainer.innerHTML = ''; // Очищаем контейнер перед добавлением новых книг
+
+    // Загружаем все книги и изображения асинхронно
+    const bookItemsPromises = books.map(book => {
+        return fetch(`http://localhost:8080/api/books/${book.id}/image`) // Запрашиваем изображение для каждой книги
+            .then(response => response.json()) // Получаем данные в формате JSON
+            .then(data => {
+                const imageUrl = data.image; // Строка Base64 с изображением
+
+                // Создаем элемент книги с изображением
+                const bookItem = document.createElement('div');
+                bookItem.classList.add('book-item');
+
+                const imgElement = document.createElement('img');
+                imgElement.src = imageUrl; // Устанавливаем Base64 как источник изображения
+                imgElement.alt = book.title;
+
+                // Заполняем элемент книги
+                bookItem.innerHTML = `
+                    <div class="book-title">${book.title}</div>
+                `;
+                bookItem.prepend(imgElement); // Добавляем изображение перед названием
+
+                return bookItem; // Возвращаем элемент книги
+            })
+            .catch(error => {
+                console.error('Ошибка при загрузке изображения:', error);
+                return null; // В случае ошибки возвращаем null
+            });
+    });
+
+    // После загрузки всех изображений добавляем книги в контейнер
+    Promise.all(bookItemsPromises)
+        .then(bookItems => {
+            // Очищаем контейнер и добавляем книги в DOM только один раз
+            bookItems.forEach(item => {
+                if (item) {
+                    booksContainer.appendChild(item); // Добавляем книгу в контейнер
+                }
+            });
+        });
+}
+
+
 </script>
 <footer>
     <div class="logo">

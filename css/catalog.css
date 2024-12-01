@@ -24,7 +24,7 @@ header {
     position: fixed; /* Фиксация хедера */
     top: 0; /* Расположение у верхнего края */
     width: 100%; /* Ширина на весь экран */
-    z-index: 1;
+    z-index: 15;
 }
 
 /* Стили логотипа */
@@ -84,13 +84,65 @@ header nav a:hover {
 }
 
 .button-container {
+    margin-top: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    border-bottom: 0.5px solid #ccc;
     gap: 240px;
+    border-radius: 20px;
 }
+.dropdown {
+    display: none;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 25px;
+    padding: 10px;
+    z-index: 10;
+    left: 15px;
+    transform: translateX(-5%);
+}
+
+.dropdown.show {
+    display: block;
+}
+
+#sortDropdown {
+    bottom: 400px;
+    width: 200px;
+    position: absolute;
+    left: 460px;
+    z-index: 10;
+}
+
+#filterDropdown {
+    bottom: 460px;
+    left: 850px;
+    width: 250px;
+    position: absolute;
+    z-index: 10;
+}
+
+.dropdown-button {
+    margin: 5px 0;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    background-color: #ffffff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.dropdown-button:hover {
+    background-color: #f0f0f0;
+}
+
+#sortButton, #filterButton {
+    position: relative;
+    z-index: 10;
+}
+
+
 
 .button {
     margin: 0 10px;
@@ -109,47 +161,43 @@ header nav a:hover {
 }
 
 
-/* Основной контейнер для книг */
 .books-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 равные колонки */
-    gap: 40px; /* Равномерные отступы между изображениями */
-    justify-items: center; /* Центрируем изображения внутри колонок */
-    margin: 40px auto; /* Отступы сверху и снизу, центрирование по горизонтали */
-    max-width: 1200px; /* Ограничение ширины контейнера */
-    margin-top: 100px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    justify-items: center;
+    margin: 40px auto;
+    max-width: 1200px;
+    margin-top: 30px;
 }
 
-/* Стили для изображений книг */
 .books-container img {
-    width: 200px; /* Уменьшенный размер ширины */
-    height: 200px; /* Уменьшенный размер высоты */
-    object-fit: cover; /* Обрезаем изображение, чтобы сохранить пропорции */
-    border: 1px solid #ddd; /* Легкая рамка вокруг изображений */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Небольшая тень для объема */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Плавный эффект увеличения */
-    cursor: pointer; /* Указываем, что элемент кликабельный */
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
-/* Эффект при наведении на изображение */
 .books-container img:hover {
-    transform: scale(1.05); /* Легкое увеличение */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Увеличиваем тень */
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Стили для контейнера книги */
 .book-item {
-    text-align: center; /* Центрируем элементы внутри контейнера */
+    text-align: center;
 }
 
-/* Стили для названия книги */
 .book-title {
-    margin-top: 10px; /* Отступ сверху от картинки */
-    font-size: 16px; /* Размер шрифта */
-    font-weight: 200px; /* Жирное начертание */
-    color: #333; /* Цвет текста */
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 200px;
+    color: #333;
     font-family: 'Kumbh Sans', sans-serif;
 }
+
 
 
 

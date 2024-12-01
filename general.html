@@ -6,7 +6,6 @@
     <title>BOOK SHOP</title>
     <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="js/script.js">
 </head>
 <body>
 
@@ -157,24 +156,31 @@
             showSlide(index);
         });
     });
-    document.addEventListener('DOMContentLoaded', () => {
-        const loginButton = document.querySelector('.login-btn');
-        // Проверяем статус авторизации
 
-        if (localStorage.getItem("isLoggedIn")) {
-            loginButton.textContent = 'Выйти'; // Меняем текст кнопки
-            loginButton.addEventListener('click', () => {
-                localStorage.removeItem("isLoggedIn");
-                window.location = "autorization.html";
-                console.log("CHECK")
-                // location.reload(); // Перезагрузка страницы
-            });
-        } else {
-            loginButton.addEventListener('click', () => {
-                window.location = "autorization.html";
-            })
-        }
-    });
+   document.addEventListener('DOMContentLoaded', () => {
+    const loginButton = document.querySelector('.login-btn');
+
+    if (!loginButton) {
+        console.error("Кнопка с классом '.login-btn' не найдена");
+        return;
+    }
+
+    // Проверяем статус авторизации
+    if (localStorage.getItem("isLoggedIn")) {
+        loginButton.textContent = 'Выйти'; // Меняем текст кнопки
+
+        loginButton.addEventListener('click', () => {
+            // Удаляем авторизацию
+            localStorage.removeItem("isLoggedIn");
+            window.location = "autorization.html"; // Перенаправляем на страницу авторизации
+        });
+    } else {
+        loginButton.addEventListener('click', () => {
+            window.location = "autorization.html";
+        });
+    }
+});
+
     </script>
 
 </body>

@@ -16,34 +16,50 @@
     </div>
 </body>
 <script>
+
+let userRoles = []; // Глобальная переменная для хранения ролей
+
+// Слушаем событие клика на кнопку входа
 document.getElementById("loginBtn").addEventListener("click", async function () {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch("http://localhost:8080/api/auth/login", {
+        // 1. Авторизация пользователя
+        const loginResponse = await fetch("http://localhost:8080/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password })
         });
 
-        if (response.ok) {
-            const data = await response.json();
-
-            // Проверка на роль администратора
-            if (data.roles.includes("ROLE_ADMIN")) {
-                window.location.href = "admin.html"; // Перенаправление на панель администратора
-            } else {
-                window.location.href = "general.html"; // Перенаправление на главную страницу
-            }
-        } else {
+        if (!loginResponse.ok) {
             alert("Ошибка авторизации: неверные данные");
+            return;
+        }
+
+        const loginData = await loginResponse.json();
+
+        // 2. Сохраняем роли пользователя в sessionStorage
+        userRoles = loginData.roles; // Сохраняем роли из ответа сервера
+        sessionStorage.setItem("userRoles", JSON.stringify(userRoles)); // Сохраняем роли в sessionStorage
+
+        // 3. В зависимости от роли перенаправляем пользователя
+        if (userRoles.includes("ROLE_ADMIN")) {
+            window.location.href = "admin.html"; // Перенаправление на панель администратора
+        } else {
+            window.location.href = "general.html"; // Перенаправление на главную страницу
         }
     } catch (error) {
         alert("Произошла ошибка. Попробуйте еще раз.");
+        console.error("Ошибка авторизации:", error);
     }
 });
 
+function logout() {
+    userRoles = []; // Очищаем глобальную переменную
+    sessionStorage.removeItem("userRoles"); // Очищаем sessionStorage
+    alert("Вы вышли из системы");
+}
 
 </script>
 </html>
