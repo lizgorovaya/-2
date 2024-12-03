@@ -201,6 +201,12 @@ function updateBookList(books) {
                 imgElement.src = imageUrl; // Устанавливаем Base64 как источник изображения
                 imgElement.alt = book.title;
 
+                // Добавляем обработчик на клик по изображению
+                imgElement.addEventListener("click", () => {
+                    // Переход на страницу книги с переданным ID
+                    window.location.href = `/book.html?id=${book.id}`;
+                });
+
                 // Заполняем элемент книги
                 bookItem.innerHTML = `
                     <div class="book-title">${book.title}</div>

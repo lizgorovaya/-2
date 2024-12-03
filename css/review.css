@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Kumbh Sans', sans-serif;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    width: 500px;
+    margin-top: 100px;
+}
+
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #333;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="password"], 
+input[type="file"] {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+select {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+select:focus {
+    border-color: #D9D9D9;
+}
+
+select option {
+    padding: 5px;
+    background-color: #fff;
+    color: #333;
+}
+
+select option:hover {
+    background-color: #f0f0f0;
+}
+
+textarea {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: #ECE4E4;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+
+button:hover {
+    background-color: transparent;
+    opacity: 0.8;
+}
+
+
+#comment {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+#book-raiting {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+#book-raiting:focus {
+    border-color: #D9D9D9; /* Цвет границы при фокусе */
+    /* box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); */
+}
+
+#book-raiting option {
+    padding: 5px; /* Внутренний отступ для вариантов */
+    background-color: #fff; /* Белый фон */
+    color: #333; /* Цвет текста */
+}
+
+#book-raiting option:hover {
+    background-color: #f0f0f0; /* Цвет фона при наведении */
+}
+
+#book-title {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+#book-title:focus {
+    border-color: #D9D9D9; /* Цвет границы при фокусе */
+    /* box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); */
+}
+
+#book-title option {
+    padding: 5px; /* Внутренний отступ для вариантов */
+    background-color: #fff; /* Белый фон */
+    color: #333; /* Цвет текста */
+}
+
+#book-title option:hover {
+    background-color: #f0f0f0; /* Цвет фона при наведении */
+}

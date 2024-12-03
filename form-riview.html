@@ -1,0 +1,104 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оставление отзыва</title>
+    <link rel="stylesheet" href="css/review.css">
+</head>
+<body>
+    <div class="container">
+        <p>Отзыв</p>
+        <select id="book-title">
+            <option value="" >Название книги</option>
+        </select>
+        <select id="book-raiting">
+            <option value="">Рейтинг книги</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <textarea id="comment" placeholder="Описание книги" required></textarea>
+        <button id="registerBtn">СОЗДАТЬ</button>
+
+    </div>
+
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const bookSelect = document.getElementById('book-title');
+    const registerBtn = document.getElementById('registerBtn');
+    const ratingSelect = document.getElementById('book-raiting');
+    const commentTextarea = document.getElementById('comment');
+
+    // Загрузка книг
+    fetch('http://localhost:8080/api/books')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке данных');
+            }
+            return response.json();
+        })
+        .then(books => {
+            console.log(books);
+            books.forEach(book => {
+                const option = document.createElement('option');
+                option.value = book.id;
+                option.textContent = book.title;
+                bookSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+
+    // Обработчик для кнопки СОЗДАТЬ
+    registerBtn.addEventListener('click', function () {
+        const selectedBookId = bookSelect.value;
+        const rating = ratingSelect.value;
+        const comment = commentTextarea.value;
+
+        if (!selectedBookId || !rating || !comment) {
+            alert('Пожалуйста, заполните все поля.');
+            return;
+        }
+
+        // Создаем FormData
+        const formData = new URLSearchParams();
+        formData.append('bookId', selectedBookId);
+        formData.append('rating', rating);
+        formData.append('comment', comment);
+
+        // Отправляем запрос с параметрами в формате x-www-form-urlencoded
+        fetch('http://localhost:8080/api/reviews/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData.toString(),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при отправке данных');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Отзыв успешно создан!');
+                console.log('Отзыв успешно отправлен:', data);
+            })
+            .catch(error => {
+                alert('Ошибка при создании отзыва. Проверьте данные и повторите попытку.');
+                console.error('Ошибка:', error);
+            });
+    });
+});
+
+
+    </script>
+    
+    
+
+
+    
