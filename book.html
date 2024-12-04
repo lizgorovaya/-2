@@ -40,14 +40,31 @@
             <div class="book-cover"></div>
         </div>
 
-        <div>
-            <div class="book-description"></div>     
-        </div>
+       
 </div>
-
+ <div>
+        <div class="book-description"></div>     
+</div>
 
 <button id="actionButton" class="styled-button"></button>
 
+<div class="recon">Рекомендации</div>
+
+<div class="recommendations-container-wrapper">
+    <button class="navigation-button left" id="scroll-left">❮</button>
+    <div id="recommendations" class="recommendations-container">
+        <!-- Картинки будут загружаться сюда -->
+    </div>
+    <button class="navigation-button right" id="scroll-right">❯</button>
+</div>
+
+<footer>
+    <div class="logo">
+        <a href="general.html">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+        </a>
+    </div>
+</footer>
 <script>
    function fetchBookData() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -172,18 +189,60 @@ function getBookIdFromURL() {
     return params.get("id");
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    const recommendationsContainer = document.querySelector(".recommendations-container");
+    const scrollLeftButton = document.querySelector(".navigation-button.left");
+    const scrollRightButton = document.querySelector(".navigation-button.right");
+
+    // Загрузка рекомендаций
+    fetch("http://localhost:8080/api/reviews/recommendations")
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Ошибка загрузки рекомендаций");
+            }
+            return response.json();
+        })
+        .then((books) => {
+            recommendationsContainer.innerHTML = ""; // Очистить контейнер
+
+            books.forEach((book) => {
+                const img = document.createElement("img");
+
+                // Проверяем, что картинка есть и правильный формат
+                if (book.image) {
+                    img.src = book.image;  // Это и есть Base64 строка
+                }
+
+                img.alt = book.title;
+                img.classList.add("book-cover-image");
+
+                // Добавляем переход на страницу отзывов
+                img.addEventListener("click", () => {
+                    window.location.href = `/reviews/${book.id}`; // Переход по ID книги
+                });
+
+                recommendationsContainer.appendChild(img); // Добавление изображения в контейнер
+            });
+        })
+        .catch((error) => {
+            console.error("Ошибка:", error);
+            recommendationsContainer.innerHTML = "<p>Не удалось загрузить рекомендации.</p>";
+        });
+
+    // Обработчик для прокрутки влево
+    scrollLeftButton.addEventListener("click", () => {
+        recommendationsContainer.style.transform = `translateX(-150px)`; // Перемещаем контейнер на 200px влево
+    });
+
+    // Обработчик для прокрутки вправо
+    scrollRightButton.addEventListener("click", () => {
+        recommendationsContainer.style.transform = `translateX(150px)`; // Перемещаем контейнер на 200px вправо
+    });
+});
 
 </script>
 
 
-
-<footer>
-    <div class="logo">
-        <a href="general.html">
-            <img src="images/logo.png" alt="BOOK SHOP Logo">
-        </a>
-    </div>
-</footer>
 
 </body>
 </html>

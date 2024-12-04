@@ -128,15 +128,27 @@ header nav a:hover {
 }
 
 .book-description {
-    font-size: 16px;
-    line-height: 1.5;
-    margin-top: -200px; /* Убираем верхний отступ, если есть */
-    text-align: left; /* Выравнивание текста слева */
+    margin-left: 160px;
+    line-height: 1.6; /* Улучшение читаемости */
+    font-family: 'Kumbh Sans', sans-serif;
+    font-size: 18px;
+    line-height: 1.5; /* Интерлиньяж */
+    max-width: 45%; /* Ширина контейнера равна ширине родителя */
+    height: auto; /* Контейнер растягивается по высоте */
+    padding: 20px; /* Внутренние отступы */
+    text-align: justify; /* Выравнивание текста по ширине */
+    margin-top: -340px; /* Отступ сверху */
+    overflow-wrap: break-word; /* Перенос длинных слов */
+    word-wrap: break-word; /* Поддержка старых браузеров */
+    word-break: break-word; /* Принудительный перенос длинных строк */
+    overflow: hidden; /* Скрыть содержимое, выходящее за пределы */
 }
 
+
+
 .styled-button {
-    margin-top: 15px;
-    margin-left:270px;
+    margin-top: 45px;
+    margin-left:410px;
     padding: 10px 20px;
     border: 1px solid #D9D9D9;
     background-color: #FFFFFF;
@@ -151,11 +163,105 @@ header nav a:hover {
 }
 
 
+.recon{
+    margin-left: 160px;
+    margin-top: 130px;
+    font-size: 40px;
+    font-weight: 400;
+    margin-bottom: 10px; /* Отступ под заголовком */
+    font-family: 'Montserrat', sans-serif;
+    color: #000000;
+    text-align: left; /* Выравнивание текста слева */
+}
+
+/* Контейнер для всех рекомендаций */
+.recommendations-container-wrapper {
+    position: relative;
+    width: 1200px; /* Ширина контейнера */
+    overflow: hidden; /* Прячет элементы, выходящие за пределы */
+    display: flex;
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+    margin: 100px auto; /* Сместить контейнер ниже и по центру страницы */
+}
+
+
+
+/* Контейнер с изображениями */
+.recommendations-container {
+    display: flex;
+    gap: 70px; /* Расстояние между изображениями */
+    transition: transform 0.3s ease-in-out; /* Плавная прокрутка */
+}
+
+/* Изображения книг */
+.book-cover-image {
+    width: 250px; /* Ширина контейнера */
+    height: 250px; /* Высота контейнера */
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Не позволяет контейнеру сжиматься */
+    overflow: hidden; /* Прячет части изображений, которые выходят за пределы */
+}
+
+.book-cover-image img {
+    max-width: 100%; /* Ограничивает изображение по ширине */
+    max-height: 100%; /* Ограничивает изображение по высоте */
+    object-fit: contain; /* Сохраняет пропорции изображения, не обрезая его */
+}
+
+
+
+.book-cover-image:hover {
+    transform: scale(1.05); /* Увеличение масштаба при наведении */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Эффект тени */
+}
+
+/* Кнопки прокрутки */
+.navigation-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); /* Центрирование по вертикали */
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: none;
+    padding: 15px; /* Устанавливаем одинаковые отступы для создания круглой формы */
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 100%; /* Делаем кнопки круглыми */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+/* Эффект при наведении на кнопки */
+.navigation-button:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Кнопка слева */
+.navigation-button.left {
+    left: 10px;
+}
+
+/* Кнопка справа */
+.navigation-button.right {
+    right: 10px;
+}
+
+
 footer {
+    margin-top: 140px;
     padding: 20px;
     background-color: #FFFFFF;
     text-align: center;
-    margin-top: 280px;
+   
 }
 
 .footer-logo {
