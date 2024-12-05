@@ -21,7 +21,7 @@
         <a href="general.html">Главная</a>
         <a href="catalog.html">Каталог</a>
         <a href="authors1.html">Авторы</a>
-        <a href="#">Рекомендации</a>
+        <a href="user_orders.html">Заказы</a>
     </nav>
     <div class="auth-buttons">
         <button class="login-btn">
@@ -47,6 +47,8 @@
 </div>
 
 <button id="actionButton" class="styled-button"></button>
+
+<button id="recom" class="recom-button"></button>
 
 <div class="recon">Рекомендации</div>
 
@@ -183,6 +185,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Извлекаем роли из sessionStorage
+    const storedRoles = sessionStorage.getItem("userRoles");
+    const userRoles = storedRoles ? JSON.parse(storedRoles) : [];
+
+    // Получаем ссылку на кнопку
+    const actionButton = document.getElementById("recom");
+
+    // Проверяем, если роли существуют
+    if (userRoles.length > 0) {
+        if (userRoles.includes("ROLE_ADMIN")) {
+            // Если пользователь администратор, скрываем кнопку
+            actionButton.style.display = "none";
+        } else if (userRoles.includes("ROLE_USER")) {
+            // Если пользователь обычный пользователь, показываем кнопку
+            actionButton.style.display = "block";
+            actionButton.innerText = "Заказать книгу";
+
+            // Назначаем обработчик для обычного пользователя
+            actionButton.addEventListener("click", () => {
+                // Перенаправление на страницу книги
+                window.location.href = "order.html"; // Укажите правильный URL страницы
+            });
+        } else {
+            alert("Неизвестная роль!");
+        }
+    } else {
+        alert("Пользователь не авторизован!");
+        window.location.href = "login.html"; // Перенаправление на страницу логина
+    }
+});
+
+
 // Функция для извлечения ID книги из URL (например, ?id=123)
 function getBookIdFromURL() {
     const params = new URLSearchParams(window.location.search);
@@ -218,8 +254,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Добавляем переход на страницу отзывов
                 img.addEventListener("click", () => {
-                    window.location.href = `/reviews/${book.id}`; // Переход по ID книги
+                    console.log(`Переход по книге: ${book.title}, ID: ${book.id}`);
+                    window.location.href = `/rewiew.html?id=${book.id}`; // Переход на страницу с информацией о книге
                 });
+
 
                 recommendationsContainer.appendChild(img); // Добавление изображения в контейнер
             });

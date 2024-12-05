@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOOK SHOP</title>
     <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/general1.css">
+    <link rel="stylesheet" href="css/review1.css">
     <link rel="stylesheet" href="js/script.js">
 </head>
 <body>
@@ -21,7 +21,7 @@
         <a href="general.html">Главная</a>
         <a href="catalog.html">Каталог</a>
         <a href="authors1.html">Авторы</a>
-        <a href="#">Рекомендации</a>
+        <a href="#">Заказы</a>
     </nav>
     <div class="auth-buttons">
         <button class="login-btn">
@@ -33,12 +33,18 @@
     </div>
 </header>
 
-<div id="book-info" class="book-info-container"></div>
+<div id="book-info" class="book-info-container">
+    <div class="book-text"></div>
+    <div class="book-image"></div>
+</div>
+
+<button id="actionButton" class="styled-button"></button>
+
 
 <!-- Контейнер для комментариев -->
+<div class="recom-title">Комментарии</div>
 <div id="comments" class="comments-container">
-    <h2>Комментарии</h2>
-    <p>Загрузка комментариев...</p>
+    
 </div>
 <footer>
     <div class="logo">
@@ -48,3 +54,62 @@
     </div>
 </footer>
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookId = urlParams.get('id');
+    const bookContainer = document.getElementById('book-info');
+    const commentsContainer = document.getElementById('comments');
+
+    if (!bookId) {
+        bookContainer.innerHTML = '<p>Неверный ID книги.</p>';
+        return;
+    }
+
+    fetch(`http://localhost:8080/api/reviews/${bookId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Ошибка загрузки данных! статус: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const { book, author, reviews } = data;
+
+            console.log("Книга:", book);
+            console.log("Автор:", author);
+            console.log("Отзывы:", reviews);
+
+
+            // Заполняем информацию о книге
+            bookContainer.innerHTML = `
+            <div class="book-text">
+                <h1>${book.title}</h1>
+                <p><strong>Автор:</strong> ${author.fullName}</p>
+                <p><strong>Описание:</strong> ${book.description}</p>
+            </div>
+            <div class="book-image">
+                <img src="data:image/jpeg;base64,${book.photo}" alt="Обложка книги" class="book-cover">
+            </div>
+            `;
+
+            // Заполняем отзывы
+            commentsContainer.innerHTML = reviews.length > 0
+                ? reviews.map(review => `
+                
+                    <div class="comment">
+                        <p><strong>Оценка:</strong> ${review.rating}/5</p>
+                        <p><strong>Комментарий:</strong> ${review.comment}</p>
+                        <p><em>Дата:</em> ${review.createdDate}</p>
+                    </div>
+                `).join('')
+                : '<p>Нет комментариев.</p>';
+        })
+        .catch(err => {
+            console.error("Ошибка:", err);
+            bookContainer.innerHTML = '<p>Не удалось загрузить информацию о книге.</p>';
+            commentsContainer.innerHTML = '<p>Не удалось загрузить комментарии.</p>';
+        });
+});
+
+
+</script>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOK SHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/users_order.css">
+    <link rel="stylesheet" href="js/script.js">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="/general.html" class="logo">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+            <span>BOOK SHOP</span>
+        </a>
+    </div>
+    <nav>
+        <a href="general.html">Главная</a>
+        <a href="catalog.html">Каталог</a>
+        <a href="authors1.html">Авторы</a>
+        <a href="user_orders.html">Заказы</a>
+    </nav>
+    <div class="auth-buttons">
+        <button class="login-btn">
+            Войти
+        </button>
+        <a href="registration.html">
+            <button class="register-btn">Зарегистрироваться</button>
+        </a>
+    </div>
+</header>
+<h1>Ваши заказы</h1>
+    <div id="orders-container">
+        <!-- Здесь будут отображаться заказы -->
+    </div>
+
+    <script>
+        // Функция для получения заказов пользователя
+        function getUserOrders() {
+    fetch('http://localhost:8080/api/orders/user-orders', {
+        method: 'GET',
+        credentials: 'include', // Обеспечиваем, что сессионные куки будут отправляться вместе с запросом
+    })
+    .then(response => {
+        if (response.status === 200) {
+            return response.json(); // Если ответ успешен, парсим JSON
+        } else if (response.status === 204) {
+            alert("У этого пользователя нет заказов.");
+            return;
+        } else if (response.status === 403) {
+            alert("Вы не авторизованы или пытаетесь получить доступ к чужим данным.");
+            return;
+        } else if (response.status === 401) {
+            alert("Пользователь не авторизован.");
+            return;
+        } else {
+            throw new Error("Неизвестная ошибка: " + response.statusText);
+        }
+    })
+    .then(data => {
+        if (data) {
+            displayOrders(data); // Функция для отображения заказов
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка при получении заказов.');
+    });
+}
+
+function displayOrders(orders) {
+    const ordersContainer = document.getElementById('orders-container');
+    ordersContainer.innerHTML = ''; // Очистим контейнер перед добавлением новых данных
+
+    if (orders.length === 0) {
+        ordersContainer.innerHTML = 'Нет заказов для отображения.';
+        return;
+    }
+
+    orders.forEach(order => {
+        const orderElement = document.createElement('div');
+        orderElement.classList.add('order');
+        orderElement.innerHTML = `
+            <div style="flex-grow: 1;">
+                <p>Заказ №${order.id}</p>
+                <p>Дата доставки: ${order.deliveryDate}</p>
+                <p>Имя клиента: ${order.customerName}</p>
+                <p>Адрес доставки: ${order.customerAddress || 'Не указан'}</p>
+                <p>Способ оплаты: ${order.paymentMethod || 'Не указан'}</p>
+                <p>Книга: ${order.bookTitle || 'Название книги не найдено'}</p>
+            </div>
+            <button class="delete-order-btn" data-id="${order.id}">Удалить</button>
+        `;
+        ordersContainer.appendChild(orderElement);
+    });
+
+    // Добавляем обработчики для кнопок удаления
+    
+    const deleteButtons = document.querySelectorAll('.delete-order-btn');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', event => {
+            const orderId = event.target.getAttribute('data-id');
+            deleteOrder(orderId); // Вызываем функцию удаления заказа
+        });
+    });
+}
+
+// Функция для удаления заказа
+function deleteOrder(orderId) {
+    fetch(`http://localhost:8080/api/orders/${orderId}`, {
+        method: 'DELETE',
+        credentials: 'include', // Для передачи сессионных данных
+    })
+        .then(response => {
+            if (response.ok) {
+                alert(`Заказ №${orderId} успешно удалён.`);
+                getUserOrders(); // Обновляем список заказов
+            } else {
+                throw new Error(`Ошибка при удалении заказа №${orderId}: ${response.statusText}`);
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert(`Не удалось удалить заказ №${orderId}.`);
+        });
+}
+
+
+// Вызовем функцию при загрузке страницы
+window.onload = function() {
+    getUserOrders();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const loginButton = document.querySelector('.login-btn');
+
+    if (!loginButton) {
+        console.error("Кнопка с классом '.login-btn' не найдена");
+        return;
+    }
+
+    // Проверяем статус авторизации
+    if (localStorage.getItem("isLoggedIn")) {
+        loginButton.textContent = 'Выйти'; // Меняем текст кнопки
+
+        loginButton.addEventListener('click', () => {
+            // Удаляем авторизацию
+            localStorage.removeItem("isLoggedIn");
+            window.location = "autorization.html"; // Перенаправляем на страницу авторизации
+        });
+    } else {
+        loginButton.addEventListener('click', () => {
+            window.location = "autorization.html";
+        });
+    }
+});
+
+    </script>
+    
+
+<footer>
+    <div class="logo">
+        <a href="general.html">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+        </a>
+    </div>
+</footer>

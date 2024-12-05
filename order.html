@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOK SHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/order.css">
+</head>
+<body>
+<div class="container">
+    <p>Оформление заказа</p>
+    
+    <!-- Поля для ввода данных -->
+    <input class="name" id="customerName" type="text" placeholder="Введите ваше имя">
+    <input class="address" id="customerAddress" type="text" placeholder="Введите адрес доставки">
+    <select id="book-title">
+        <option value="">Название книги</option>
+    </select>
+    <input class="delivery" id="deliveryDate" type="date" placeholder="Выберите дату доставки">
+    <select id="paymentMethod">
+        <option value="">Способ оплаты</option>
+        <option value="Наличными">Наличными</option>
+        <option value="Картой">Картой</option>
+    </select>
+    <textarea id="comment" placeholder="Комментарии для курьера" required></textarea>
+    
+    <!-- Вставляем карту Яндекс -->
+    <div id="map" style="width: 100%; height: 400px;"></div>
+    
+    <button id="registerBtn">СОЗДАТЬ</button>
+</div>
+
+<!-- Добавьте ссылку на API Яндекс.Карт -->
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=19f8f579-92a5-4ac0-ac1c-c93fd667e2a8" type="text/javascript"></script>
+
+<script>
+ ymaps.ready(function () {
+    // Инициализация карты
+    var map = new ymaps.Map("map", {
+        center: [53.9006, 27.5590], // Центр карты - Минск
+        zoom: 13
+    });
+
+    // Создаем метку с возможностью перетаскивания
+    var placemark = new ymaps.Placemark([53.9006, 27.5590], {
+        balloonContent: 'Перетащите метку для выбора адреса'
+    }, {
+        draggable: true // Делаем метку перетаскиваемой
+    });
+
+    // Добавляем метку на карту
+    map.geoObjects.add(placemark);
+
+    // Событие: завершение перетаскивания метки
+    placemark.events.add('dragend', function () {
+        var coordinates = placemark.geometry.getCoordinates(); // Получаем новые координаты метки
+        updateAddressField(coordinates); // Обновляем адресное поле
+    });
+
+    // Функция для обновления адреса
+    function updateAddressField(coords) {
+        ymaps.geocode(coords).then(
+            function (res) {
+                // Берем первый объект из результата
+                var firstGeoObject = res.geoObjects.get(0);
+
+                // Если адрес найден
+                if (firstGeoObject) {
+                    var address = firstGeoObject.getAddressLine(); // Получаем строку адреса
+
+                    // Обновляем поле ввода
+                    var addressField = document.getElementById('customerAddress');
+                    addressField.value = address;
+
+                    // Сохраняем координаты для дальнейшего использования
+                    addressField.setAttribute('data-latitude', coords[0]);
+                    addressField.setAttribute('data-longitude', coords[1]);
+
+                    console.log("Адрес успешно обновлен: " + address);
+                } else {
+                    console.error("Не удалось определить адрес.");
+                    alert("Адрес не найден. Попробуйте выбрать другое место.");
+                }
+            },
+            function (err) {
+                console.error("Ошибка геокодирования:", err);
+                alert("Ошибка при получении адреса. Проверьте подключение к интернету.");
+            }
+        );
+    }
+});
+
+
+// Обработка кнопки "СОЗДАТЬ"
+document.addEventListener('DOMContentLoaded', () => {
+    // Получаем элемент <select>
+    const bookSelect = document.getElementById('book-title');
+    
+    // Проверяем, что элемент существует
+    if (!bookSelect) {
+        console.error('Элемент <select id="book-title"> не найден в DOM.');
+        return;
+    }
+
+    // Загружаем данные книг из API
+    fetch('http://localhost:8080/api/books')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке данных книг');
+            }
+            return response.json();
+        })
+        .then(books => {
+            // Проверяем, что API вернул данные
+            if (!Array.isArray(books) || books.length === 0) {
+                console.warn('Список книг пуст или имеет неправильный формат.');
+                return;
+            }
+
+            // Добавляем книги в <select>
+            books.forEach(book => {
+                const option = document.createElement('option');
+                option.value = book.id; // Используем ID книги как значение
+                option.textContent = book.title; // Используем название книги для отображения
+                bookSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Ошибка при загрузке данных книг:', error);
+        });
+});
+
+
+document.getElementById('registerBtn').addEventListener('click', () => {
+    const customerName = document.getElementById('customerName').value.trim();
+    const customerAddress = document.getElementById('customerAddress').value.trim();
+    const latitude = document.getElementById('customerAddress').getAttribute('data-latitude');
+    const longitude = document.getElementById('customerAddress').getAttribute('data-longitude');
+    const bookTitle = document.getElementById('book-title').value; // Это ID книги, не название
+    const deliveryDate = document.getElementById('deliveryDate').value;
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const comment = document.getElementById('comment').value.trim();
+
+    // Проверка обязательных полей
+    if (!customerName || !customerAddress || !bookTitle || !deliveryDate || !paymentMethod) {
+        alert('Пожалуйста, заполните все обязательные поля.');
+        return;
+    }
+
+    // Формируем данные для отправки
+    const orderData = {
+        customerName: customerName,
+        customerAddress: customerAddress,
+        longitude: parseFloat(longitude) || null,
+        latitude: parseFloat(latitude) || null,
+        book: { id: bookTitle },  // Используем объект книги с полем id
+        deliveryDate: deliveryDate,
+        paymentMethod: paymentMethod,
+        comment: comment || 'Без комментариев'
+    };
+
+    // Отправка данных
+    fetch('http://localhost:8080/api/orders/create', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer YOUR_JWT_TOKEN', // или используйте куки
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include', // если м использование куков
+        body: JSON.stringify(orderData)
+        
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Заказ успешно создан!');
+            // return response.json();
+            window.location.href = `catalog.html`; // Перенаправляем на страницу заказа
+        } else {
+            throw new Error('Ошибка при создании заказа');
+        }
+    })
+    .then(data => console.log('Ответ сервера:', data))
+    .catch(error => console.error('Ошибка:', error));
+});
+
+
+</script>

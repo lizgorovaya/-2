@@ -148,7 +148,7 @@ header nav a:hover {
 
 .styled-button {
     margin-top: 45px;
-    margin-left:410px;
+    margin-left:300px;
     padding: 10px 20px;
     border: 1px solid #D9D9D9;
     background-color: #FFFFFF;
@@ -159,6 +159,22 @@ header nav a:hover {
 }
 
 .styled-button:hover {
+    background-color: #D9D9D9;
+}
+
+.recom-button{
+    margin-top: -37px;
+    margin-left:550px;
+    padding: 10px 20px;
+    border: 1px solid #D9D9D9;
+    background-color: #FFFFFF;
+    color: #000000;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+.recom-button:hover {
     background-color: #D9D9D9;
 }
 

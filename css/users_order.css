@@ -1,0 +1,172 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Kumbh Sans', sans-serif;
+    color: #000000;
+    background-color: #FFFFFF;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D9D9D9;
+    position: fixed; /* Фиксация хедера */
+    top: 0; /* Расположение у верхнего края */
+    width: 100%; /* Ширина на весь экран */
+    z-index: 1;
+}
+
+
+/* Стили логотипа */
+header .logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 400;
+    text-decoration: none;
+    color: inherit;
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+    margin-right: 10px;
+}
+
+header nav {
+    margin-left: 420px;
+}
+
+header nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 400;
+}
+
+header nav a:hover {
+    color: #9C9C9C;
+}
+
+.auth-buttons {
+    display: flex;
+}
+
+.auth-buttons button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: 1px solid #D9D9D9;
+    background-color: #FFFFFF;
+    color: #000000;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+.auth-buttons button:hover {
+    background-color: #D9D9D9;
+}
+
+.auth-buttons .register-btn {
+    background-color: #ECE4E4;
+}
+ /* Стили для контейнера с заказами */
+    #orders-container {
+        margin: 20px auto;
+        margin-top: 100px;
+        padding: 10px;
+        width: 90%;
+        max-width: 1800px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Стили для каждого заказа */
+    .order {
+        display: flex; /* Включаем Flexbox */
+        justify-content: space-between; /* Размещаем элементы по сторонам */
+        align-items: center; /* Центрируем элементы по высоте */
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    /* При наведении на заказ - эффект подъема */
+    .order:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Заголовок заказа (номер заказа) */
+    .order p:first-child {
+        font-size: 25px;
+        font-weight: bold;
+        color: #333;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Стили для даты и имени клиента */
+    .order p {
+        font-size: 17px;
+        color: #555;
+        font-family: 'Kumbh Sans', sans-serif;
+
+    }
+
+
+    .delete-order-btn {
+        margin-right: 50px;
+        padding: 10px 20px; /* Увеличиваем внутренние отступы */
+        background-color: #ECE4E4;
+        color: #000000;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 13px; /* Увеличиваем размер шрифта */
+        height: 40px; /* Задаём фиксированную высоту */
+        transition: background-color 0.3s ease, transform 0.2s ease; /* Добавляем плавные переходы */
+        border: 1px solid #D9D9D9;
+
+    }
+    
+    .delete-order-btn:hover {
+        background-color: #FFFFFF;
+        transform: scale(1.05); /* Лёгкое увеличение кнопки при наведении */
+    }
+    
+
+    
+
+    /* Стили для сообщения, если заказов нет */
+    #orders-container .no-orders {
+        text-align: center;
+        font-size: 18px;
+        color: #888;
+    }
+
+    footer {
+        padding: 20px;
+        background-color: #FFFFFF;
+        text-align: center;
+    }
+    
+    .footer-logo {
+        font-size: 18px;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'Kumbh Sans', sans-serif;
+    }
+    
