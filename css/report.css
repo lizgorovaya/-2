@@ -24,8 +24,18 @@ header {
     position: fixed; /* Фиксация хедера */
     top: 0; /* Расположение у верхнего края */
     width: 100%; /* Ширина на весь экран */
-    z-index: 15;
+    z-index: 1;
 }
+
+.fio {
+    font-size: 40px;
+    font-weight: 400;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 100px;
+}
+
 
 /* Стили логотипа */
 header .logo {
@@ -82,122 +92,31 @@ header nav a:hover {
 .auth-buttons .register-btn {
     background-color: #ECE4E4;
 }
-
 .button-container {
-    margin-top: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    gap: 240px;
-    border-radius: 20px;
-}
-.dropdown {
-    display: none;
-    position: absolute;
-    background-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 25px;
-    padding: 10px;
-    z-index: 10;
-    left: 15px;
-    transform: translateX(-5%);
+    display: flex; /* Включение flexbox */
+    justify-content: center; /* Горизонтальное центрирование */
+    align-items: center; /* Вертикальное центрирование */
+    height: 280px; /* Высота контейнера равна высоте экрана */
+    gap: 50px;
 }
 
-.dropdown.show {
-    display: block;
-}
-
-#sortDropdown {
-    top: 180px; /* Смещаем вниз от верхней границы */
-    width: 200px;
-    position: absolute;
-    left: 460px;
-    z-index: 10;
-}
-
-#filterDropdown {
-    top: 180px; /* Смещаем вниз от верхней границы */
-    left: 850px;
-    width: 250px;
-    position: absolute;
-    z-index: 10;
-}
-
-
-.dropdown-button {
-    margin: 5px 0;
+.button, .button1 {
+    /* margin: 0 10px; Отступ между кнопками */
+    margin-left: 50px;
     padding: 10px 20px;
-    border: 1px solid #ddd;
-    background-color: #ffffff;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.dropdown-button:hover {
-    background-color: #f0f0f0;
-}
-
-#sortButton, #filterButton {
-    position: relative;
-    z-index: 10;
-}
-
-
-
-.button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    margin-left: 10px;
     border: 1px solid #D9D9D9;
     background-color: #FFFFFF;
     color: #000000;
     cursor: pointer;
     border-radius: 20px;
     font-family: 'Kumbh Sans', sans-serif;
+    text-decoration: none;
 }
 
-.button:hover {
-    background-color: #f0f0f0;
+.button:hover, .button1:hover {
+    background-color: #D9D9D9;
 }
 
-
-.books-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 40px;
-    justify-items: center;
-    margin: 40px auto;
-    max-width: 1200px;
-    margin-top: 30px;
-}
-
-.books-container img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-}
-
-.books-container img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-}
-
-.book-item {
-    text-align: center;
-}
-
-.book-title {
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: 200px;
-    color: #333;
-    font-family: 'Kumbh Sans', sans-serif;
-}
 
 
 footer {

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/report.css">
+    <title>Загрузка отчетов</title>
+</head>
+
+
+<header>
+    <div class="logo">
+        <a href="/general.html" class="logo">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+            <span>BOOK SHOP</span>
+        </a>
+    </div>
+    <nav>
+        <a href="general.html">Главная</a>
+        <a href="catalog.html">Каталог</a>
+        <a href="authors1.html">Авторы</a>
+        <a href="user_orders.html">Заказы</a>
+    </nav>
+    <div class="auth-buttons">
+        <button class="login-btn">
+            Войти
+        </button>
+        <a href="registration.html">
+            <button class="register-btn">Зарегистрироваться</button>
+        </a>
+    </div>
+</header>
+<body>
+    <h1>Загрузить отчеты</h1>
+
+    <div class="button-container">    
+        <button id="downloadReportButton" class="button">Скачать отчет для книг</button>
+        <button id="downloadBarChartButton"   class="button1">Скачать отчет с заказами и отзывами</button>
+    </div>   
+    <script>
+        // Функция для скачивания отчета с количеством просмотров книг
+        document.getElementById('downloadReportButton').addEventListener('click', function() {
+            fetch('http://localhost:8080/api/reports/pdf', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/pdf',  // Ожидаем PDF файл
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке отчета');
+                }
+                return response.blob(); // Получаем отчет как бинарные данные (Blob)
+            })
+            .then(blob => {
+                const link = document.createElement('a');
+                const url = window.URL.createObjectURL(blob);
+                link.href = url;
+                link.download = 'book_views_report.pdf'; // Название файла при скачивании
+                link.click();
+                window.URL.revokeObjectURL(url); // Освобождаем ресурсы
+            })
+            .catch(error => {
+                alert('Ошибка: ' + error.message);
+            });
+        });
+
+        // Функция для скачивания отчета с заказами и отзывами
+        document.getElementById('downloadBarChartButton').addEventListener('click', function() {
+            fetch('http://localhost:8080/api/reports/bar-chart-pdf', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/pdf',  // Ожидаем PDF файл
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке отчета с заказами и отзывами');
+                }
+                return response.blob(); // Получаем отчет как бинарные данные (Blob)
+            })
+            .then(blob => {
+                const link = document.createElement('a');
+                const url = window.URL.createObjectURL(blob);
+                link.href = url;
+                link.download = 'book_orders_reviews_report.pdf'; // Название файла при скачивании
+                link.click();
+                window.URL.revokeObjectURL(url); // Освобождаем ресурсы
+            })
+            .catch(error => {
+                alert('Ошибка: ' + error.message);
+            });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginButton = document.querySelector('.login-btn');
+
+            if (!loginButton) {
+                console.error("Кнопка с классом '.login-btn' не найдена");
+                return;
+            }
+
+            // Проверяем статус авторизации
+            if (localStorage.getItem("isLoggedIn")) {
+                loginButton.textContent = 'Выйти'; // Меняем текст кнопки
+
+                loginButton.addEventListener('click', () => {
+                    // Удаляем авторизацию
+                    localStorage.removeItem("isLoggedIn");
+                    window.location = "autorization.html"; // Перенаправляем на страницу авторизации
+                });
+            } else {
+                loginButton.addEventListener('click', () => {
+                    window.location = "autorization.html";
+                });
+            }
+        });
+    </script>
+
+<footer>
+    <div class="logo">
+        <a href="general.html">
+            <img src="images/logo.png" alt="BOOK SHOP Logo">
+        </a>
+    </div>
+</footer>
+</body>
+</html>

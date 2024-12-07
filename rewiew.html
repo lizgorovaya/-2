@@ -21,8 +21,8 @@
         <a href="general.html">Главная</a>
         <a href="catalog.html">Каталог</a>
         <a href="authors1.html">Авторы</a>
-        <a href="#">Заказы</a>
-    </nav>
+        <a id="orders-link" href="#">Заказы</a>
+        </nav>
     <div class="auth-buttons">
         <button class="login-btn">
             Войти
@@ -110,6 +110,55 @@ document.addEventListener("DOMContentLoaded", function () {
             commentsContainer.innerHTML = '<p>Не удалось загрузить комментарии.</p>';
         });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ordersLink = document.getElementById('orders-link');
+    if (!ordersLink) {
+        console.error("Элемент с id 'orders-link' не найден!");
+        return;
+    } else {
+        console.log("Элемент найден:", ordersLink);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ordersLink = document.getElementById('orders-link');
+
+    if (!ordersLink) {
+        console.error("Элемент с id 'orders-link' не найден в DOM!");
+        return;
+    }
+
+    // Запрос на сервер для получения роли пользователя
+    fetch('http://localhost:8080/api/orders/user-role') // Укажите правильный URL для получения роли
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка при получении роли пользователя');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const role = data.role; // Предполагаем, что сервер возвращает объект с полем role
+            console.log('Роль пользователя:', role);
+
+            if (role === 'ROLE_USER') {
+                ordersLink.href = 'user_orders.html';
+                console.log("Назначена ссылка для USER:", ordersLink.href);
+            } else if (role === 'ROLE_ADMIN') {
+                ordersLink.href = 'all-orders.html';
+                console.log("Назначена ссылка для ADMIN:", ordersLink.href);
+            } else {
+                console.error('Неизвестная роль:', role);
+            }
+
+            // Финальная проверка
+            console.log("Финальное значение href:", ordersLink.href);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+});
+
 
 
 </script>

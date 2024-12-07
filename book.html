@@ -21,8 +21,8 @@
         <a href="general.html">Главная</a>
         <a href="catalog.html">Каталог</a>
         <a href="authors1.html">Авторы</a>
-        <a href="user_orders.html">Заказы</a>
-    </nav>
+        <a id="orders-link" href="#">Заказы</a>
+        </nav>
     <div class="auth-buttons">
         <button class="login-btn">
             Войти
@@ -242,24 +242,35 @@ document.addEventListener("DOMContentLoaded", function () {
             recommendationsContainer.innerHTML = ""; // Очистить контейнер
 
             books.forEach((book) => {
+                // Создаем контейнер для книги
+                const bookContainer = document.createElement("div");
+                bookContainer.classList.add("book-container");
+
+                // Создаем элемент изображения
                 const img = document.createElement("img");
-
-                // Проверяем, что картинка есть и правильный формат
                 if (book.image) {
-                    img.src = book.image;  // Это и есть Base64 строка
+                    img.src = book.image; // Используем Base64 строку
                 }
-
                 img.alt = book.title;
                 img.classList.add("book-cover-image");
 
-                // Добавляем переход на страницу отзывов
+                // Добавляем обработчик клика для перехода на страницу отзывов
                 img.addEventListener("click", () => {
                     console.log(`Переход по книге: ${book.title}, ID: ${book.id}`);
-                    window.location.href = `/rewiew.html?id=${book.id}`; // Переход на страницу с информацией о книге
+                    window.location.href = `/rewiew.html?id=${book.id}`;
                 });
 
+                // Создаем элемент подписи
+                const caption = document.createElement("span");
+                caption.textContent = book.title; // Текст подписи — название книги
+                caption.classList.add("book-caption");
 
-                recommendationsContainer.appendChild(img); // Добавление изображения в контейнер
+                // Добавляем элементы в контейнер книги
+                bookContainer.appendChild(img);
+                bookContainer.appendChild(caption);
+
+                // Добавляем контейнер книги в общий контейнер рекомендаций
+                recommendationsContainer.appendChild(bookContainer);
             });
         })
         .catch((error) => {
@@ -269,14 +280,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Обработчик для прокрутки влево
     scrollLeftButton.addEventListener("click", () => {
-        recommendationsContainer.style.transform = `translateX(-150px)`; // Перемещаем контейнер на 200px влево
+        recommendationsContainer.style.transform = `translateX(180px)`; // Перемещаем контейнер на 200px влево
     });
 
     // Обработчик для прокрутки вправо
     scrollRightButton.addEventListener("click", () => {
-        recommendationsContainer.style.transform = `translateX(150px)`; // Перемещаем контейнер на 200px вправо
+        recommendationsContainer.style.transform = `translateX(-180px)`; // Перемещаем контейнер на 200px вправо
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ordersLink = document.getElementById('orders-link');
+    if (!ordersLink) {
+        console.error("Элемент с id 'orders-link' не найден!");
+        return;
+    } else {
+        console.log("Элемент найден:", ordersLink);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ordersLink = document.getElementById('orders-link');
+
+    if (!ordersLink) {
+        console.error("Элемент с id 'orders-link' не найден в DOM!");
+        return;
+    }
+
+    // Запрос на сервер для получения роли пользователя
+    fetch('http://localhost:8080/api/orders/user-role') // Укажите правильный URL для получения роли
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка при получении роли пользователя');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const role = data.role; // Предполагаем, что сервер возвращает объект с полем role
+            console.log('Роль пользователя:', role);
+
+            if (role === 'ROLE_USER') {
+                ordersLink.href = 'user_orders.html';
+                console.log("Назначена ссылка для USER:", ordersLink.href);
+            } else if (role === 'ROLE_ADMIN') {
+                ordersLink.href = 'all-orders.html';
+                console.log("Назначена ссылка для ADMIN:", ordersLink.href);
+            } else {
+                console.error('Неизвестная роль:', role);
+            }
+
+            // Финальная проверка
+            console.log("Финальное значение href:", ordersLink.href);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+});
+
 
 </script>
 

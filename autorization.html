@@ -19,35 +19,43 @@
 
 let userRoles = []; // Глобальная переменная для хранения ролей
 
-// Слушаем событие клика на кнопку входа
 document.getElementById("loginBtn").addEventListener("click", async function () {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
     try {
-        // 1. Авторизация пользователя
         const loginResponse = await fetch("http://localhost:8080/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password }),
         });
 
         if (!loginResponse.ok) {
-            alert("Ошибка авторизации: неверные данные");
+            const errorData = await loginResponse.json();
+            alert(errorData.error || "Ошибка авторизации");
             return;
         }
 
         const loginData = await loginResponse.json();
 
-        // 2. Сохраняем роли пользователя в sessionStorage
-        userRoles = loginData.roles; // Сохраняем роли из ответа сервера
-        sessionStorage.setItem("userRoles", JSON.stringify(userRoles)); // Сохраняем роли в sessionStorage
+        // Преобразуем роли
+        userRoles = Array.isArray(loginData.role)
+            ? loginData.role.map((role) => role.trim())
+            : [];
 
-        // 3. В зависимости от роли перенаправляем пользователя
+        // Логируем данные
+        console.log("Роли пользователя:", userRoles);
+
+        // Сохраняем в sessionStorage
+        sessionStorage.setItem("userRoles", JSON.stringify(userRoles));
+        sessionStorage.setItem("username", loginData.username);
+        sessionStorage.setItem("userId", loginData.id);
+
+        // Перенаправляем пользователя
         if (userRoles.includes("ROLE_ADMIN")) {
-            window.location.href = "admin.html"; // Перенаправление на панель администратора
+            window.location.href = "admin.html";
         } else {
-            window.location.href = "general.html"; // Перенаправление на главную страницу
+            window.location.href = "general.html";
         }
     } catch (error) {
         alert("Произошла ошибка. Попробуйте еще раз.");
@@ -58,8 +66,25 @@ document.getElementById("loginBtn").addEventListener("click", async function () 
 function logout() {
     userRoles = []; // Очищаем глобальную переменную
     sessionStorage.removeItem("userRoles"); // Очищаем sessionStorage
-    alert("Вы вышли из системы");
+    
+    // Отправляем запрос на сервер для очистки данных
+    fetch('http://localhost:8080/api/auth/logout', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка при очистке данных о пользователе');
+        }
+        alert("Вы вышли из системы и данные о пользователе очищены");
+        window.location.href = 'login.html'; // Перенаправление на страницу входа
+    })
+    .catch(error => {
+        console.error("Ошибка при выходе:", error);
+        alert("Ошибка при выходе из системы.");
+    });
 }
+
 
 </script>
 </html>

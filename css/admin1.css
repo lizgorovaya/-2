@@ -153,10 +153,10 @@ thead th {
     display: flex;                /* Используем flexbox для горизонтального выравнивания */
     padding: 20px;                /* Добавляем отступы */
     gap: 120px;
-    margin-left: 600px;
+    margin-left: 400px;
 }
 
-.add-book-link, .add-author-link {
+.add-book-link, .add-author-link, .report {
     margin-left: 3px;  /* Уменьшаем отступ между ссылками */
     padding: 10px 20px;
     border: 1px solid #D9D9D9;
@@ -169,7 +169,7 @@ thead th {
 }
 
 /* Стиль для при наведении */
-.add-book-link:hover, .add-author-link:hover {
+.add-book-link:hover, .add-author-link:hover, .report:hover {
     background-color: #D9D9D9; /* Цвет при наведении */
     /* Меняем цвет текста при наведении */
 }

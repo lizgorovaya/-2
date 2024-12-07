@@ -87,6 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 alert('Отзыв успешно создан!');
                 console.log('Отзыв успешно отправлен:', data);
+                window.location.href = `catalog.html`; // Перенаправляем на страницу заказа
+
             })
             .catch(error => {
                 alert('Ошибка при создании отзыва. Проверьте данные и повторите попытку.');

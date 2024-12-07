@@ -179,6 +179,7 @@ header nav a:hover {
 }
 
 
+
 .recon{
     margin-left: 160px;
     margin-top: 130px;
@@ -231,7 +232,14 @@ header nav a:hover {
     object-fit: contain; /* Сохраняет пропорции изображения, не обрезая его */
 }
 
-
+.book-caption {
+    display: block;
+    margin-top: 10px; /* Отступ между изображением и подписью */
+    font-size: 16px;
+    color: #333;
+    font-family: 'Kumbh Sans', sans-serif;
+    text-align: center; /* Центрирование текста подписи */
+}
 
 .book-cover-image:hover {
     transform: scale(1.05); /* Увеличение масштаба при наведении */

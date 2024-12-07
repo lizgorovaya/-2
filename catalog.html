@@ -21,8 +21,7 @@
         <a href="general.html">Главная</a>
         <a href="catalog.html">Каталог</a>
         <a href="authors1.html">Авторы</a>
-        <a href="user_orders.html">Заказы</a>
-    </nav>
+        <a id="orders-link" href="#">Заказы</a>    </nav>
     <div class="auth-buttons">
         <button class="login-btn">
             Войти
@@ -49,11 +48,11 @@
 
 <!-- Всплывающее окно для фильтрации (пока пустое, но можно добавить фильтры) -->
 <div class="dropdown" id="filterDropdown">
-    <div class="dropdown-content">
-        <button class="dropdown-button">Фильтр 1</button>
-        <button class="dropdown-button">Фильтр 2</button>
+    <div class="dropdown-content" id="authorFilter">
+        <!-- Имена авторов будут динамически загружены сюда -->
     </div>
 </div>
+
 
 <div class="books-container" id="books-container"></div>
 <script>
@@ -121,8 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location = "autorization.html";
         })
     }
-});
-// Получаем элементы
+});// Получаем элементы
 const sortButton = document.getElementById('sortButton');
 const filterButton = document.getElementById('filterButton');
 const sortDropdown = document.getElementById('sortDropdown');
@@ -132,19 +130,81 @@ const filterDropdown = document.getElementById('filterDropdown');
 const sortByTitle = document.getElementById('sortByTitle');
 const sortByDate = document.getElementById('sortByDate');
 
+// Элемент списка авторов
+const authorFilter = document.getElementById('authorFilter');
+
+
+// Храним список авторов
+let authors = [];
+
+// Открытие/закрытие меню фильтрации
+filterButton.addEventListener('click', function(event) {
+    filterDropdown.classList.toggle('show');
+    sortDropdown.classList.remove('show'); // Закрываем меню сортировки, если оно открыто
+});
+
+// Функция для получения списка авторов с сервера
+function fetchAuthors() {
+    fetch('http://localhost:8080/api/authors')
+        .then(response => response.json())
+        .then(authors => {
+            console.log('Авторы загружены:', authors);  // Логируем полученные данные
+            displayAuthors(authors);
+        })
+        .catch(error => {
+            console.error('Ошибка при загрузке авторов:', error);
+        });
+}
+
+
+// Функция для отображения авторов в выпадающем списке
+function displayAuthors(authors) {
+    authorFilter.innerHTML = '';  // Очищаем перед добавлением новых данных
+    authors.forEach(author => {
+        const authorButton = document.createElement('button');
+        authorButton.classList.add('dropdown-button');
+        authorButton.textContent = author.fullName;  // Используем fullName
+
+        // При клике на имя автора фильтруем книги
+        authorButton.addEventListener('click', function() {
+            filterBooksByAuthor(author.fullName);  // Передаем fullName
+            filterDropdown.classList.remove('show');  // Закрываем выпадающий список после выбора
+        });
+
+        authorFilter.appendChild(authorButton);  // Добавляем кнопку в список
+    });
+}
+
+
+// Функция для фильтрации книг по имени автора
+function filterBooksByAuthor(authorName) {
+    const url = `http://localhost:8080/api/books/filter?authorName=${authorName}`;  // URL для фильтрации
+    console.log(`Запрос на фильтрацию по автору: ${url}`);
+
+    fetch(url)
+        .then(response => response.json())
+        .then(books => {
+            console.log(books);  // Логируем для отладки
+            updateBookList(books); // Обновляем список книг на странице
+        })
+        .catch(error => {
+            console.error('Ошибка при фильтрации книг:', error);
+        });
+}
+
 // Обработчик клика на кнопку "СОРТИРОВАТЬ"
 sortButton.addEventListener('click', function(event) {
     sortDropdown.classList.toggle('show'); // Открываем/закрываем меню сортировки
     filterDropdown.classList.remove('show'); // Закрываем меню фильтрации, если оно открыто
+
+    if (currentSort !== null) {
+        currentSort = null; // Сбрасываем сортировку
+        console.log('Сортировка сброшена');
+        updateBookList([]); // Очистить список книг, чтобы сбросить сортировку
+    }
 });
 
-// Обработчик клика на кнопку "ФИЛЬТРОВАТЬ"
-filterButton.addEventListener('click', function(event) {
-    filterDropdown.classList.toggle('show'); // Открываем/закрываем меню фильтрации
-    sortDropdown.classList.remove('show'); // Закрываем меню сортировки, если оно открыто
-});
-
-// Обработчики сортировки (удалил дублирование)
+// Обработчики сортировки
 sortByTitle.addEventListener('click', function(event) {
     event.preventDefault(); // Предотвращаем переход по ссылке
     fetchBooks('title'); // Запрашиваем сортировку по алфавиту
@@ -233,6 +293,58 @@ function updateBookList(books) {
         });
 }
 
+// Вызов функции для загрузки авторов при загрузке страницы
+fetchAuthors();
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ordersLink = document.getElementById('orders-link');
+    if (!ordersLink) {
+        console.error("Элемент с id 'orders-link' не найден!");
+        return;
+    } else {
+        console.log("Элемент найден:", ordersLink);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ordersLink = document.getElementById('orders-link');
+
+    if (!ordersLink) {
+        console.error("Элемент с id 'orders-link' не найден в DOM!");
+        return;
+    }
+
+    // Запрос на сервер для получения роли пользователя
+    fetch('http://localhost:8080/api/orders/user-role') // Укажите правильный URL для получения роли
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка при получении роли пользователя');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const role = data.role; // Предполагаем, что сервер возвращает объект с полем role
+            console.log('Роль пользователя:', role);
+
+            if (role === 'ROLE_USER') {
+                ordersLink.href = 'user_orders.html';
+                console.log("Назначена ссылка для USER:", ordersLink.href);
+            } else if (role === 'ROLE_ADMIN') {
+                ordersLink.href = 'all-orders.html';
+                console.log("Назначена ссылка для ADMIN:", ordersLink.href);
+            } else {
+                console.error('Неизвестная роль:', role);
+            }
+
+            // Финальная проверка
+            console.log("Финальное значение href:", ordersLink.href);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+});
 
 </script>
 <footer>
