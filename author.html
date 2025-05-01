@@ -234,7 +234,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
+    // Проверяем, есть ли у пользователя роль ROLE_ADMIN
     if (userRoles.includes("ROLE_ADMIN")) {
+        // Отображаем кнопку только для администраторов
         actionButton.style.display = "block";
         actionButton.innerText = "Удалить автора";
 
@@ -258,8 +260,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             }
         });
+    } else {
+        // Полностью скрываем кнопку для всех, кто не является администратором
+        actionButton.style.display = "none";
     }
 });
+
 document.addEventListener('DOMContentLoaded', () => {
     const ordersLink = document.getElementById('orders-link');
     if (!ordersLink) {
